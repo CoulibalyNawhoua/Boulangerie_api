@@ -48,7 +48,7 @@ class Procurement extends Model
         'updated_at',
     ];
 
-    public function procurementDetails()
+    public function procurement_details()
     {
         return $this->hasMany(ProcurementDetails::class, 'procurement_id', 'id');
     }

@@ -22,6 +22,7 @@ class ProcurementDetails extends Model
         'name',
         'code ',
         'quantity',
+        'quantity_already_received',
         'price',
         'unit_price',
         'sub_total',
