@@ -34,6 +34,7 @@ class Procurement extends Model
         'document',
         'uuid',
         'note',
+        'delivery_date',
         'add_date',
         'added_by',
         'add_ip',

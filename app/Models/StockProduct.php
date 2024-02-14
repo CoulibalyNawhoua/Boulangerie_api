@@ -6,24 +6,23 @@ use App\Core\Traits\SpatieLogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class SaleDetails extends Model
+class StockProduct extends Model
 {
     use HasFactory;
     use SpatieLogsActivity;
 
-    protected $table='sale_details';
+    protected $table='stock_productions';
     protected $primaryKey="id";
     protected $fillable=[
         'id',
-        'sale_id',
-        'product_id',
-        'bakehouse_id',
-        'quantity',
-        'price',
-        'unit_price',
-        'sub_total',
-        'unit_id',
         'created_at',
         'updated_at',
+        'low_quantity',
+        'quantity',
+        'stock_alert',
+        'unit_id',
+        'bakehouse_id',
+        'product_id',
+        'sell_price'
     ];
 }

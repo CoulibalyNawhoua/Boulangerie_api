@@ -15,22 +15,12 @@ class ProductHistory extends Model
     protected $primaryKey="id";
     protected $fillable=[
         'id',
-        'produit_id',
-        'quantity',
-        'gap',
-        'reception_id',
-        'order_id',
-        'quantity_after',
         'unit_id',
         'quantity',
-        'quantity_before',
         'type',
-        'total_price',
-        'description',
-        'unit_price',
+        'price',
         'product_id',
         'bakehouse_id',
-        'ajustement_id',
         'add_date',
         'added_by',
         'add_ip',
@@ -43,7 +33,6 @@ class ProductHistory extends Model
         'deleted_by',
         'delete_ip',
         'delete_date',
-        'code',
         'uuid',
     ];
 }
