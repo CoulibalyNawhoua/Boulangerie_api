@@ -18,13 +18,13 @@ class Product extends Model
         'name',
         'category_id',
         'unit_id',
-        'product_reference',
         'sous_famille_id',
-        'pcb_product',
-        'sell_price',
-        'product_barcode',
-        'purchase_price',
+        'price',
+        'code',
+        'stock_alert',
+        'cost',
         'bakehouses_id',
+        'type',
         'image',
         'pcb',
         'created_at',
@@ -39,7 +39,6 @@ class Product extends Model
         'delete_ip',
         'delete_date',
         'uuid'
-
     ];
 
     public function unit()

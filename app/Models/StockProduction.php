@@ -11,18 +11,16 @@ class StockProduction extends Model
     use HasFactory;
     use SpatieLogsActivity;
 
-    protected $table='stock_productions';
+    protected $table='productions_stock';
     protected $primaryKey="id";
     protected $fillable=[
         'id',
         'created_at',
         'updated_at',
-        'low_quantity',
         'quantity',
-        'stock_alert',
         'unit_id',
         'bakehouse_id',
         'product_id',
-        'sell_price'
+        'price'
     ];
 }

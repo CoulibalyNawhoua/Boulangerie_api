@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+use App\Core\Traits\UuidGenerator;
+use App\Core\Traits\GetModelByUuid;
 use App\Core\Traits\SpatieLogsActivity;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class TechnicalSheet extends Model
 {
     use HasFactory;
     use SpatieLogsActivity;
+    use UuidGenerator;
+    use GetModelByUuid;
 
     protected $table='technical_sheet';
     protected $primaryKey="id";

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Core\Traits\UuidGenerator;
+use App\Core\Traits\GetModelByUuid;
 use App\Core\Traits\SpatieLogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +12,10 @@ class Expense extends Model
 {
     use HasFactory;
     use SpatieLogsActivity;
+    use HasFactory;
+    use SpatieLogsActivity;
+    use UuidGenerator;
+    use GetModelByUuid;
 
     protected $table='expenses';
     protected $primaryKey="id";

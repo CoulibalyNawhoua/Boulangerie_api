@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Core\Traits\UuidGenerator;
+use App\Core\Traits\GetModelByUuid;
+use App\Core\Traits\SpatieLogsActivity;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Customer extends Model
 {
     use HasFactory;
+    use SpatieLogsActivity;
+    use UuidGenerator;
+    use GetModelByUuid;
 
     protected $table='customers';
     protected $primaryKey="id";

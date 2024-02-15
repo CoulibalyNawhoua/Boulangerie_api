@@ -2,33 +2,101 @@
 
 namespace App\Repositories;
 
-use Carbon\Carbon;
+use App\Models\Product;
+use App\Models\StockProduct;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Repositories\Repository;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Product;
+
 
 class ProductRepository extends Repository
 {
-    public function __construct(Product $model=null)
-    {
-        $this->model = $model;
+   public function __construct(Product $model) {
+
+    $this->model = $model;
+
+   }
+
+   public function storeProduct(Request $request) {
+
+    $name = $request->name;
+    $stock_alert = $request->stock_alert;
+    $price = $request->price;
+    $cost = $request->cost;
+    $quantity = $request->quantity;
+    $type = $request->type; // 0 pour produit et 1 pour production
+
+    $oldFile = '';
+    $directory = 'produits';
+    $fieldname = 'image';
+
+    $data_file = $this->fileUpload($request, $fieldname, $directory, $oldFile);
+
+    $image_url = $data_file;
+
+    $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+    $product = Product::create([
+        'name' => Str::of($name)->upper(),
+        'stock_alert' => $stock_alert,
+        'price' => $price,
+        'cost' => $cost,
+        'bakehouse_id' =>  $bakehouse_id,
+        'image' => $image_url,
+        'quantity' => $quantity,
+        'added_by' => Auth::user()->id,
+        'type' => $type,
+        'add_ip' => $this->getIp(),
+    ]);
+
+    StockProduct::create([
+        'quantity' => $quantity,
+        'product_id' => $product->id,
+        'bakehouse_id' => $bakehouse_id,
+        'price' =>  $price,
+        'type' => $type,
+        'quantity' => $quantity,
+    ]);
+
+        return $product;
     }
 
 
-    public function ListProduct()
-    {
-        return DB::table('products')
-                ->leftJoin('users','users.id','=','products.added_by')
-                ->leftJoin('units','units.id','=','products.unit_id')
-                ->leftJoin('sous_familles','sous_familles.id','=','products.sous_famille_id')
-                ->leftJoin('categories','categories.id','=','products.category_id')
-                ->leftJoin('familles','familles.id','=','sous_familles.famille_id')
-                ->selectRaw('produits.*, units.name AS product_unit, CONCAT(users.first_name," ",users.first_name) as created_by, familles.name AS famille, sous_familles.name AS sous_famille, categories.nom_categorie')
-                ->get();
-    }
+    public function updateProduct(Request $request, $uuid) {
+
+
+        $product = $this->model->where('uuid', $uuid)->first();
+
+        $name = $request->name;
+        $stock_alert = $request->stock_alert;
+        $price = $request->price;
+        $cost = $request->cost;
+        $quantity = $request->quantity;
+        $type = $request->type; // 0 pour produit et 1 pour production
+
+        $oldFile =  ($product->image) ? $product->imaimagege_url : '' ;
+        $directory = 'produits';
+        $fieldname = 'image';
+
+        $data_file = $this->fileUpload($request, $fieldname, $directory, $oldFile);
+
+        $image_url = $data_file;
+
+
+        $product->update([
+            'name' => Str::of($name)->upper(),
+            'stock_alert' => $stock_alert,
+            'price' => $price,
+            'cost' => $cost,
+            'image' => $image_url,
+            'added_by' => Auth::user()->id,
+            'type' => $type,
+            'add_ip' => $this->getIp(),
+        ]);
+
+            return $product;
+        }
 
 
 

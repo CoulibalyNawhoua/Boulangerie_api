@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Core\Traits\UuidGenerator;
+use App\Core\Traits\GetModelByUuid;
 use App\Core\Traits\SpatieLogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +12,8 @@ class Expense_category extends Model
 {
     use HasFactory;
     use SpatieLogsActivity;
+    use UuidGenerator;
+    use GetModelByUuid;
 
     protected $table='expense_categories';
     protected $primaryKey="id";
