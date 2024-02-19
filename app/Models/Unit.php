@@ -15,7 +15,7 @@ class Unit extends Model
     use UuidGenerator;
     use GetModelByUuid;
 
-    protected $table='unites';
+    protected $table='units';
     protected $primaryKey="id";
     protected $fillable=[
         'id',
