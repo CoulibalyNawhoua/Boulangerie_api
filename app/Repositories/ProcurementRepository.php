@@ -18,7 +18,12 @@ class ProcurementRepository extends Repository
         $this->model = $model;
     }
 
-    public function store_procurement(Request $request)  {
+    public function procurementList() {
+
+       return  Procurement::where('is_deleted', 0)->get();
+    }
+
+    public function procurementStore(Request $request)  {
 
 
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
@@ -71,7 +76,7 @@ class ProcurementRepository extends Repository
         return $procurement;
     }
 
-    public function  update_procurement(Request $request, $uuid) {
+    public function  procurementUpdate(Request $request, $uuid) {
 
 
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;

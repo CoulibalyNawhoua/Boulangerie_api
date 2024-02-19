@@ -18,7 +18,12 @@ class ProductRepository extends Repository
 
    }
 
-   public function storeProduct(Request $request) {
+   public function productList() {
+
+        return Product::where('is_deleted', 0)->get();
+   }
+
+   public function productStore(Request $request) {
 
     $name = $request->name;
     $stock_alert = $request->stock_alert;
@@ -63,7 +68,7 @@ class ProductRepository extends Repository
     }
 
 
-    public function updateProduct(Request $request, $uuid) {
+    public function productUpdate(Request $request, $uuid) {
 
 
         $product = $this->model->where('uuid', $uuid)->first();

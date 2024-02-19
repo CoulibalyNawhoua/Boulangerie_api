@@ -18,7 +18,12 @@ class SaleRepository extends Repository
         $this->model = $model;
     }
 
-    public function store_sale(Request $request)  {
+    public function saleList() {
+
+        return Sale::where('is_deleted', 0)->get();
+    }
+
+    public function saleStore(Request $request)  {
 
 
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;

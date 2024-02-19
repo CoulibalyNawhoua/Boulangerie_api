@@ -15,6 +15,7 @@ class ExpenseCategoryController extends Controller
 
         $this->expenseCategoryRepository = $expenseCategoryRepository;
     }
+
     public function index()
     {
         $resp = $this->expenseCategoryRepository->list_expense_category();
@@ -22,9 +23,7 @@ class ExpenseCategoryController extends Controller
         return response()->json(['data' => $resp]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
         //
@@ -46,9 +45,7 @@ class ExpenseCategoryController extends Controller
         return response()->json(['data' => $resp]);
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(string $uuid)
     {
         $resp = $this->expenseCategoryRepository->findByUuid($uuid);
