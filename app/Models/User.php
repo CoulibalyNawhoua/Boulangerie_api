@@ -26,6 +26,7 @@ class User extends Authenticatable implements JWTSubject
         'full_name',
         'first_name',
         'password',
+        'bakehouses_id',
         'active',
     ];
 
@@ -68,6 +69,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function bakehouse()
     {
-        return $this->hasOne(Bakehouse::class, 'user_id', 'id');
+        return $this->belongsTo(Bakehouse::class, 'bakehouses_id', 'id');
     }
 }
