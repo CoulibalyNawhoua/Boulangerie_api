@@ -19,7 +19,7 @@ class UnitRepository extends Repository
     public function List_units()
     {
         return Unit::where('units.is_deleted',0)
-            ->leftJoin('users','users.id','=','unites.added_by')
+            ->leftJoin('users','users.id','=','units.added_by')
             ->selectRaw('units.*, CONCAT(users.first_name," ",users.first_name) as auteur');
     }
 
