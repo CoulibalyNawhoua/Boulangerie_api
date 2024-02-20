@@ -20,7 +20,7 @@ class FamilleRepository extends Repository
     {
         return Famille::where('is_deleted',0)
                     ->leftJoin('users','users.id','=','familles.added_by')
-                    ->selectRaw('familles.name, CONCAT(users.first_name," ",users.first_name) as created_by');
+                    ->selectRaw('familles.name, CONCAT(users.first_name," ",users.first_name) as created_by')->get();
     }
 
 }

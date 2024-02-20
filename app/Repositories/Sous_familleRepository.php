@@ -24,7 +24,7 @@ class Sous_familleRepository extends Repository
         return Sous_famille::where('sous_familles.is_deleted',0)
                             ->leftJoin('familles','familles.id','=','sous_familles.familles_id')
                             ->leftJoin('users','users.id','=','sous_familles.added_by')
-                            ->selectRaw('sous_familles.*, familles.name AS nom_famille, CONCAT(users.first_name," ",users.last_name) as created_by');
+                            ->selectRaw('sous_familles.*, familles.name AS nom_famille, CONCAT(users.first_name," ",users.last_name) as created_by')->get();
 
     }
 
