@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use App\Models\Sous_famille;
 use App\Repositories\Repository;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\StoreSousFamilleRequest;
 
 /**
  * Class Sous_familleRepository.

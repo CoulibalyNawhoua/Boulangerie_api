@@ -30,6 +30,7 @@ class ProductRepository extends Repository
     $price = $request->price;
     $cost = $request->cost;
     $quantity = $request->quantity;
+    $sous_famille_id = $request->sous_famille_id;
     $type = $request->type; // 0 pour produit et 1 pour production
 
     $oldFile = '';
@@ -50,6 +51,7 @@ class ProductRepository extends Repository
         'bakehouse_id' =>  $bakehouse_id,
         'image' => $image_url,
         'quantity' => $quantity,
+        'sous_famille_id' => $sous_famille_id,
         'added_by' => Auth::user()->id,
         'type' => $type,
         'add_ip' => $this->getIp(),
@@ -79,8 +81,9 @@ class ProductRepository extends Repository
         $cost = $request->cost;
         $quantity = $request->quantity;
         $type = $request->type; // 0 pour produit et 1 pour production
+        $sous_famille_id = $request->sous_famille_id;
 
-        $oldFile =  ($product->image) ? $product->imaimagege_url : '' ;
+        $oldFile =  ($product->image) ? $product->image : '' ;
         $directory = 'produits';
         $fieldname = 'image';
 
@@ -95,6 +98,7 @@ class ProductRepository extends Repository
             'price' => $price,
             'cost' => $cost,
             'image' => $image_url,
+            'sous_famille_id' => $sous_famille_id,
             'added_by' => Auth::user()->id,
             'type' => $type,
             'add_ip' => $this->getIp(),
