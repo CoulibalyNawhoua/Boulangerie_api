@@ -20,7 +20,7 @@ class Sous_famille extends Model
     protected $fillable=[
         'id',
         'name',
-        'familles_id',
+        'famille_id',
         'created_at',
         'updated_at',
         'add_date',
