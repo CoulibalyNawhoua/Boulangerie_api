@@ -27,7 +27,7 @@ class Product extends Model
         'code',
         'stock_alert',
         'cost',
-        'bakehouses_id',
+        'bakehouse_id',
         'type',
         'image',
         'pcb',
