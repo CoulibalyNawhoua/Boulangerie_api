@@ -78,7 +78,7 @@ class ProductRepository extends Repository
         $name = $request->name;
         $stock_alert = $request->stock_alert;
         $price = $request->price;
-        $cost = $request->cost;
+        // $cost = $request->cost;
         $quantity = $request->quantity;
         $type = $request->type; // 0 pour produit et 1 pour production
         $sous_famille_id = $request->sous_famille_id;
@@ -96,7 +96,7 @@ class ProductRepository extends Repository
             'name' => Str::of($name)->upper(),
             'stock_alert' => $stock_alert,
             'price' => $price,
-            'cost' => $cost,
+            // 'cost' => $cost,
             'image' => $image_url,
             'sous_famille_id' => $sous_famille_id,
             'added_by' => Auth::user()->id,
