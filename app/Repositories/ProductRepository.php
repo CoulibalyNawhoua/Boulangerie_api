@@ -118,7 +118,7 @@ class ProductRepository extends Repository
                         ->leftJoin('units', 'units.id', '=', 'products.unit_id')
                         ->where('products.is_deleted', 0)
                         ->where('products.type', 0)
-                        ->where('products.bakehouse_id', $bakehouse_id)
+                       /* ->where('products.bakehouse_id', $bakehouse_id)*/
                         ->get();
     }
 
