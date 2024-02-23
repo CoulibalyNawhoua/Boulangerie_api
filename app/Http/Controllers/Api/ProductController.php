@@ -83,4 +83,18 @@ class ProductController extends Controller
 
         return response()->json(['data' => $resp]);
     }
+
+    public function product_procurement()
+    {
+        $resp = $this->productRepository->product_procurement();
+
+        return response()->json(['data' => $resp]);
+    }
+
+    public function product_production()
+    {
+        $resp = $this->productRepository->product_production();
+
+        return response()->json(['data' => $resp]);
+    }
 }

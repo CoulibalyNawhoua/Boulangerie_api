@@ -28,6 +28,8 @@ use App\Http\Controllers\Api\SaleController;
 Route::group(['middleware'=>'jwt.auth'],function(){
 
     Route::apiResource('products', ProductController::class);
+    Route::get('/products/procurement', [ProductController::class, 'product_procurement']);
+    Route::get('/products/productions', [ProductController::class, 'product_production']);
 
     Route::apiResource('familles', FamilleController::class);
 
@@ -40,6 +42,7 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::apiResource('suppliers', SupplierController::class);
 
     Route::apiResource('units', UnitController::class);
+    Route::get('/select-unit', [UnitController::class, 'select_unit']);
 
     Route::apiResource('sous-familles', SousFamilleController::class);
 

@@ -18,7 +18,10 @@ class SupplierRepository extends Repository
     public function list_supplier()
     {
 
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
         $query = Supplier::where('suppliers.is_deleted',0)
+                        ->where('suppliers.bakehouse_id', $bakehouse_id)
                         ->leftJoin('users','users.id','=','suppliers.added_by');
 
         return $query->selectRaw('suppliers.first_name, suppliers.last_name, suppliers.phone, suppliers.address, suppliers.status, CONCAT(users.first_name," ",users.last_name) as created_by')->get();

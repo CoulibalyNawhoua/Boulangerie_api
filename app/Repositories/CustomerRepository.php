@@ -6,6 +6,7 @@ use Carbon\Carbon;
 
 use App\Models\Customer;
 use App\Repositories\Repository;
+use Illuminate\Support\Facades\Auth;
 
 
 class CustomerRepository extends Repository
@@ -17,9 +18,12 @@ class CustomerRepository extends Repository
 
     public function list_customer()
     {
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
         return Customer::where('customers.is_deleted',0)
+                            ->where('customers.bakehouse_id', $bakehouse_id)
                             ->leftJoin('users','users.id','=','customers.added_by')
-                            ->selectRaw('customers.name, CONCAT(users.first_name," ",users.last_name) as auteur');
+                            ->selectRaw('customers.*, CONCAT(users.first_name," ",users.last_name) as auteur')->get();
 
     }
 

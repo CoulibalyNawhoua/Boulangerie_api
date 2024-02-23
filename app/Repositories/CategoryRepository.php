@@ -16,6 +16,7 @@ class CategoryRepository extends Repository
 
     public function listCategory()
     {
+
         return Category::where('is_deleted',0)
                 ->leftJoin('users','users.id','=','categories.added_by')
                 ->selectRaw('categories.name, CONCAT(users.first_name," ",users.first_name) as created_by');

@@ -14,8 +14,7 @@ class ProductRepository extends Repository
 {
    public function __construct(Product $model) {
 
-    $this->model = $model;
-
+        $this->model = $model;
    }
 
    public function productList() {
@@ -27,6 +26,7 @@ class ProductRepository extends Repository
 
     $name = $request->name;
     $stock_alert = $request->stock_alert;
+    $unit_id = $request->unit_id;
     $price = $request->price;
     $cost = $request->cost;
     $quantity = $request->quantity;
@@ -52,6 +52,7 @@ class ProductRepository extends Repository
         'image' => $image_url,
         'quantity' => $quantity,
         'sous_famille_id' => $sous_famille_id,
+        'unit_id' => $unit_id,
         'added_by' => Auth::user()->id,
         'type' => $type,
         'add_ip' => $this->getIp(),
@@ -80,6 +81,7 @@ class ProductRepository extends Repository
         $price = $request->price;
         // $cost = $request->cost;
         $quantity = $request->quantity;
+        $unit_id = $request->unit_id;
         $type = $request->type; // 0 pour produit et 1 pour production
         $sous_famille_id = $request->sous_famille_id;
 
@@ -97,6 +99,7 @@ class ProductRepository extends Repository
             'stock_alert' => $stock_alert,
             'price' => $price,
             // 'cost' => $cost,
+            'unit_id' => $unit_id,
             'image' => $image_url,
             'sous_famille_id' => $sous_famille_id,
             'added_by' => Auth::user()->id,
@@ -107,6 +110,29 @@ class ProductRepository extends Repository
             return $product;
         }
 
+    public function product_procurement()
+    {
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        return Product::selectRaw('products.*, units.name AS unit')
+                        ->leftJoin('units', 'units.id', '=', 'products.unit_id')
+                        ->where('products.is_deleted', 0)
+                        ->where('products.type', 0)
+                        ->where('products.bakehouse_id', $bakehouse_id)
+                        ->get();
+    }
+
+    public function product_production()
+    {
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        return Product::selectRaw('products.*, units.name AS unit')
+                ->leftJoin('units', 'units.id', '=', 'products.unit_id')
+                ->where('products.is_deleted', 0)
+                ->where('products.type', 1)
+                ->where('products.bakehouse_id', $bakehouse_id)
+                ->get();
+    }
 
 
 }

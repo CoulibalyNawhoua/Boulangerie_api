@@ -80,6 +80,14 @@ class UnitController extends Controller
         return response()->json(['data'=>$resp]);
     }
 
+
+    public function select_unit()
+    {
+        $resp = $this->unitRepository->selectUnit();
+
+        return response()->json(['data' => $resp]);
+    }
+
     /**
      * Remove the specified resource from storage.
      */
