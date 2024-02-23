@@ -28,8 +28,8 @@ use App\Http\Controllers\Api\SaleController;
 Route::group(['middleware'=>'jwt.auth'],function(){
 
     Route::apiResource('products', ProductController::class);
-    Route::get('/products/procurement', [ProductController::class, 'product_procurement']);
-    Route::get('/products/productions', [ProductController::class, 'product_production']);
+    Route::get('/products-procurement', [ProductController::class, 'product_procurement']);
+    Route::get('/products-productions', [ProductController::class, 'product_production']);
 
     Route::apiResource('familles', FamilleController::class);
 
