@@ -22,6 +22,8 @@ class Supplier extends Model
         'first_name',
         'phone',
         'last_name',
+        'email',
+        'company',
         'address',
         'status',
         'bakehouse_id',
