@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Core\Traits\Ip;
 use App\Core\Traits\ImageTrait;
 use App\Models\Unit;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -136,6 +137,11 @@ class Repository implements RepositoryInterface
     public function selectUnit()
     {
         return Unit::where('is_deleted',0)->select('name','id')->get();
+    }
+
+    public function selectCivilities()
+    {
+        return DB::table('civilities')->select('name','id')->get();
     }
 
 
