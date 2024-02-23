@@ -117,7 +117,7 @@ class ProductRepository extends Repository
         return Product::selectRaw('products.*, units.name AS unit')
                         ->leftJoin('units', 'units.id', '=', 'products.unit_id')
                         ->where('products.is_deleted', 0)
-                        ->where('products.type', 0)
+                       /* ->where('products.type', 0)*/
                        /* ->where('products.bakehouse_id', $bakehouse_id)*/
                         ->get();
     }
