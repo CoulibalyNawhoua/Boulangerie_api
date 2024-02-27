@@ -23,6 +23,16 @@ class ProcurementRepository extends Repository
        return  Procurement::where('is_deleted', 0)->get();
     }
 
+    public function procurementView($uuid)
+    {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        return Procurement::where('procurements.uuid', $uuid)
+                            ->where('procurements.bakehouse_id', $bakehouse_id)
+                            ->with(['procurement_details.product','supplier'])->first();
+    }
+
     public function procurementStore(Request $request)  {
 
 

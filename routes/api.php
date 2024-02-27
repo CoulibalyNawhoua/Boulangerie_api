@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\PermissionConroller;
+use App\Http\Controllers\Api\RoleConroller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UnitController;
@@ -45,6 +47,11 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::get('/select-unit', [UnitController::class, 'select_unit']);
 
     Route::apiResource('sous-familles', SousFamilleController::class);
+
+    Route::apiResource('roles', RoleConroller::class);
+
+    Route::apiResource('permissions', PermissionConroller::class);
+    Route::get('permission-select', [PermissionConroller::class, 'permissionSelect']);
 
     Route::get('/procurements', [ProcurementController::class, 'procurementIndex']);
     Route::post('procurement-store', [ProcurementController::class, 'procurementStore']);

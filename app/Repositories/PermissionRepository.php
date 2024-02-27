@@ -16,21 +16,32 @@ class PermissionRepository extends Repository
         $this->model = $model;
     }
 
-    public function destroy($id)
+    public function permission_destroy($id)
     {
         return $this->model->find($id)->delete();
     }
 
 
-    public function storeUserPermission(Request $request, $id)
+    public function permission_update(Request $request, $id)
     {
         $permissions = $request->permissions;
 
         $user = User::find($id);
 
         $user->syncPermissions($permissions);
-
-
     }
+
+    public function permission_store(Request $request)
+    {
+        Permission::create([
+            'name'=> $request->name
+        ]);
+    }
+
+    public function permission_view($id)
+    {
+        return $this->model->find($id);
+    }
+
 }
 

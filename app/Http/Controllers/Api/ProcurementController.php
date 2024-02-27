@@ -45,7 +45,7 @@ class ProcurementController extends Controller
 
     public function procurementView(string $uuid)
     {
-        $resp = $this->procurementRepository->findByUuid($uuid);
+        $resp = $this->procurementRepository->procurementView($uuid);
 
         return response()->json(['data' => $resp]);
     }

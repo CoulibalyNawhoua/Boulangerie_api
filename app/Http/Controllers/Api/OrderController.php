@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\RoleRepository;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    private $roleRepository;
+
+   public function __construct(RoleRepository $roleRepository){
+       $this->$roleRepository = $roleRepository;
+   }
+
     public function index()
     {
         //
