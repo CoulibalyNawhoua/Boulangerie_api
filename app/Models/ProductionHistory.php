@@ -8,39 +8,32 @@ use App\Core\Traits\SpatieLogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class TechnicalSheet extends Model
+class ProductionHistory extends Model
 {
     use HasFactory;
     use SpatieLogsActivity;
     use UuidGenerator;
     use GetModelByUuid;
 
-    protected $table='technical_sheet';
+    protected $table='products_histories';
     protected $primaryKey="id";
     protected $fillable=[
         'id',
-        'comment',
+        'quantity',
+        'product_id',
         'bakehouse_id',
-        'date',
-        'time',
-        'created_at',
-        'updated_at',
         'add_date',
         'added_by',
         'add_ip',
+        'created_at',
+        'updated_at',
         'edited_by',
         'edit_date',
         'edit_ip',
         'is_deleted',
+        'deleted_by',
         'delete_ip',
         'delete_date',
-        'uuid'
+        'uuid',
     ];
-
-
-    public function technical_sheet_details()
-    {
-        return $this->belongsTo(TechnicalSheetDetails::class, 'technical_sheet_id', 'id');
-    }
-
 }
