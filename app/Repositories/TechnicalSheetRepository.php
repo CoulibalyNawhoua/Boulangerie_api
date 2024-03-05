@@ -34,7 +34,7 @@ class TechnicalSheetRepository extends Repository
 
         return TechnicalSheet::where('technical_sheet.uuid', $uuid)
                             ->where('technical_sheet.bakehouse_id', $bakehouse_id)
-                            ->with(['technical_sheet_details.product.unit'])
+                            ->with(['technical_sheet_details.product', 'technical_sheet_details.unit'])
                             ->first();
     }
 
