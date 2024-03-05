@@ -40,7 +40,7 @@ class TechnicalSheet extends Model
 
     public function technical_sheet_details()
     {
-        return $this->belongsTo(TechnicalSheetDetails::class, 'technical_sheet_id', 'id');
+        return $this->hasMany(TechnicalSheetDetails::class, 'technical_sheet_id', 'id');
     }
 
 }
