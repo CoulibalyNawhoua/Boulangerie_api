@@ -8,7 +8,7 @@ use App\Core\Traits\SpatieLogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Ajustement extends Model
+class OrderReturn extends Model
 {
     use HasFactory;
     use SpatieLogsActivity;
@@ -16,12 +16,13 @@ class Ajustement extends Model
     use GetModelByUuid;
 
 
-    protected $table='ajustements';
+    protected $table='order_returns';
     protected $primaryKey="id";
     protected $fillable=[
         'id',
         'reference',
         'comment',
+        'order_id',
         'bakehouse_id',
         'created_at',
         'updated_at',
@@ -37,9 +38,13 @@ class Ajustement extends Model
         'uuid'
     ];
 
-
-    public function auteur()
+    public function order_return_details()
     {
-        return $this->belongsTo(User::class, 'added_by', 'id');
+        return $this->hasMany(OrderReturnDetail::class, 'order_return_id', 'id');
+    }
+
+    public function livreur()
+    {
+        return $this->belongsTo(User::class, 'delivery_person_id', 'id');
     }
 }

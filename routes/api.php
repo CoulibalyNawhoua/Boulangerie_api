@@ -1,22 +1,24 @@
 <?php
 
-use App\Http\Controllers\Api\PermissionConroller;
-use App\Http\Controllers\Api\RoleConroller;
+
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\RoleConroller;
+use App\Http\Controllers\Api\SaleController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\FamilleController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\SupplierController;
+use App\Http\Controllers\Api\PermissionConroller;
+use App\Http\Controllers\Api\OrderReturnController;
 use App\Http\Controllers\Api\ProcurementController;
 use App\Http\Controllers\Api\SousFamilleController;
 use App\Http\Controllers\Api\Auth\WebAuthController;
+use App\Http\Controllers\Api\ProductStockController;
+use App\Http\Controllers\Api\TechnicalSheetController;
 use App\Http\Controllers\Api\ExpenseCategoryController;
 use App\Http\Controllers\Api\ProductionHistoryController;
-use App\Http\Controllers\Api\ProductStockController;
-use App\Http\Controllers\Api\SaleController;
-use App\Http\Controllers\Api\TechnicalSheetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +60,9 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::apiResource('technical-sheet', TechnicalSheetController::class);
 
     Route::apiResource('production-histories', ProductionHistoryController::class);
+
+
+    Route::apiResource('returns-orders', OrderReturnController::class);
 
     Route::get('/sale-stock', [ProductStockController::class, 'saleStock']);
     Route::get('/production-stock', [ProductStockController::class, 'productionStock']);
