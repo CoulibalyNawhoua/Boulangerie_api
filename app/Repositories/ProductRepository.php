@@ -31,7 +31,13 @@ class ProductRepository extends Repository
     $cost = $request->cost;
     $quantity = $request->quantity;
     $sous_famille_id = $request->sous_famille_id;
-    $type = $request->type; // 0 pour produit et 1 pour production
+    // $type = $request->type; // 0 pour produit et 1 pour production
+
+    if ($request->has('type')) {
+        $type = 1;
+    } else {
+        $type = 0;
+    }
 
     $oldFile = '';
     $directory = 'produits';
@@ -65,6 +71,7 @@ class ProductRepository extends Repository
         'price' =>  $price,
         'type' => $type,
         'quantity' => $quantity,
+        'unit_id' => $unit_id,
     ]);
 
         return $product;
@@ -82,7 +89,7 @@ class ProductRepository extends Repository
         // $cost = $request->cost;
         $quantity = $request->quantity;
         $unit_id = $request->unit_id;
-        $type = $request->type; // 0 pour produit et 1 pour production
+        // $type = $request->type; // 0 pour produit et 1 pour production
         $sous_famille_id = $request->sous_famille_id;
 
         $oldFile =  ($product->image) ? $product->image : '' ;
@@ -93,6 +100,11 @@ class ProductRepository extends Repository
 
         $image_url = $data_file;
 
+        if ($request->has('type')) {
+            $type = 1;
+        } else {
+            $type = 0;
+        }
 
         $product->update([
             'name' => Str::of($name)->upper(),
@@ -107,8 +119,14 @@ class ProductRepository extends Repository
             'add_ip' => $this->getIp(),
         ]);
 
-            return $product;
-        }
+        StockProduct::where('product_id', $product->id)->update([
+            'type' => $type,
+            'unit_id' => $unit_id,
+            'price' => $price
+        ]);
+
+        return $product;
+    }
 
     public function product_procurement()
     {
