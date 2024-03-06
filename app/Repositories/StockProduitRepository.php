@@ -24,7 +24,7 @@ class StockProduitRepository extends Repository
                     ->where('products.type', 1)
                     ->where('products_stock.bakehouse_id', $bakehouse_id)
                     ->leftJoin('products', 'products.id', '=', 'products_stock.product_id')
-                    ->groupByRaw('products_stock.product_id')
+                    ->groupByRaw('products_stock.product_id, products_stock.price')
                     ->get();
 
         return $query;
