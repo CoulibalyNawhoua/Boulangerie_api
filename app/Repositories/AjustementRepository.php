@@ -44,7 +44,7 @@ class AjustementRepository extends Repository
                         ->where('bakehouse_id', $bakehouse_id)
                         ->first();
             if ($stockP) {
-                $stockP->update('quantity', $item->after_quantity);
+                $stockP->update(['quantity', $item->after_quantity]);
             }
         }
 
