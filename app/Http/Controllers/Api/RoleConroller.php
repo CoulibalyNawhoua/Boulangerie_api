@@ -71,12 +71,5 @@ class RoleConroller extends Controller
 
         return response()->json(['data'=> 'okey']);
     }
-
-    public function select_livreur_bakehouse()
-    {
-        $resp = $this->roleRepository->listUsersRoleHasLivreurByBakehouse();
-
-        return response()->json(['data'=> $resp]);
-    }
        
 }

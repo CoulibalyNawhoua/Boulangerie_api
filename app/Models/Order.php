@@ -22,20 +22,10 @@ class Order extends Model
         'reference',
         'customer_id',
         'bakehouse_id',
-        'tax_percentage',
-        'tax_amount',
-        'discount_percentage',
-        'discount_amount',
-        'shipping_amount',
         'total_amount',
         'paid_amount',
         'due_amount',
-        'payment_date',
         'status',
-        'payment_status',
-        'payment_method',
-        'shipping_status',
-        'document',
         'uuid',
         'note',
         'add_date',
@@ -53,13 +43,18 @@ class Order extends Model
     ];
 
 
-    public function auteur()
+     public function auteur()
     {
         return $this->belongsTo(User::class, 'added_by', 'id');
     }
 
-    public function orderDetails()
+    public function customer()
     {
-        return $this->hasMany(OrdeDetails::class, 'order_id', 'id');
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
+
+    public function order_details()
+    {
+        return $this->hasMany(OrderDetails::class, 'order_id', 'id');
     }
 }

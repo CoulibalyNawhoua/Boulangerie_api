@@ -5,6 +5,7 @@ namespace App\Core\Traits;
 use Carbon\Carbon;
 use App\Models\Sale;
 use App\Models\Order;
+use App\Models\Delivery;
 use App\Models\Ajustement;
 use App\Models\Procurement;
 
@@ -35,6 +36,11 @@ trait GeneratedCodeTrait {
                     $nombre_elt=Ajustement::get()->count();
                     $nombre_elt++;
                     $prefix= 'AJUST';
+                break;
+                case 'Delivery':
+                    $nombre_elt=Delivery::get()->count();
+                    $nombre_elt++;
+                    $prefix= 'LIV';
                 break;
             }
             $code=$prefix.'-'.$code_generer.$nombre_elt;

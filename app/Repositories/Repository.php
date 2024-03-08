@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Core\Traits\Ip;
 use App\Core\Traits\ImageTrait;
+use App\Models\Customer;
 use App\Models\Unit;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
@@ -133,7 +134,7 @@ class Repository implements RepositoryInterface
     }
 
 
-    public function listUsersRoleHasLivreurByBakehouse()
+    public function select_delivery_person_bakehouse()
     {
 
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
@@ -146,6 +147,15 @@ class Repository implements RepositoryInterface
                 ]);
             })
             ->get();
+    }
+
+    public function selectCustomerByBakehouse()
+    {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        return Customer::where('bakehouse_id', $bakehouse_id)
+            ->selectRaw('id, CONCAT(first_name," ",last_name) AS fullName')->get();
     }
 
 

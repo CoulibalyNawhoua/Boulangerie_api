@@ -91,4 +91,12 @@ class CustomerController extends Controller
 
         return response()->json(['data'=>$resp]);
     }
+
+
+    public function select_customer_by_bakehouse() {
+        
+        $resp = $this->customerRepository->selectCustomerByBakehouse();
+
+        return response()->json(['data'=>$resp]);
+    }
 }

@@ -25,7 +25,7 @@ class UserRepository extends Repository
         $this->model = $model ;
     }
 
-    public function storeUser(StoreUserRequest $request)
+    public function storeUser(Request $request)
     {
 
         $input = $request->all();
@@ -66,7 +66,7 @@ class UserRepository extends Repository
 
 
 
-    public function updateEmail(StoreUserEmailChangeRequest $request, $id)
+    public function updateEmail(Request $request, $id)
     {
         $input = $request->all();
 
@@ -79,7 +79,7 @@ class UserRepository extends Repository
 
 
 
-    public function updatePassword(StoreUserPasswordChangeRequest $request, $id)
+    public function updatePassword(Request $request, $id)
     {
         $input = $request->all();
 
@@ -89,7 +89,7 @@ class UserRepository extends Repository
     }
 
 
-    public function updateRole(StoreUserRoleChangeRequest $request, $id)
+    public function updateRole(Request $request, $id)
     {
 
         $input = $request->all();
@@ -167,7 +167,7 @@ class UserRepository extends Repository
     }
 
 
-    public function updateUsername(StoreUserUsernameChangeRequest $request, $id)
+    public function updateUsername(Request $request, $id)
     {
         $input = $request->all();
 
@@ -178,25 +178,25 @@ class UserRepository extends Repository
         return $user->user_name;
     }
 
-    public function updateUserEntrepot(Request $request,$id)
-    {
-        $input = $request->all();
+    // public function updateUserEntrepot(Request $request,$id)
+    // {
+    //     $input = $request->all();
 
-        $user = $this->model->find($id);
+    //     $user = $this->model->find($id);
 
-        $user->update(['entite_id' => $input['entite_id']]);
+    //     $user->update(['entite_id' => $input['entite_id']]);
 
 
-        if ($user->entite) {
-            $entrepot = $user->entite->name;
-        }
+    //     if ($user->entite) {
+    //         $entrepot = $user->entite->name;
+    //     }
 
-        else{
-            $entrepot = '';
-        }
+    //     else{
+    //         $entrepot = '';
+    //     }
 
-        return $entrepot;
-    }
+    //     return $entrepot;
+    // }
 
 
 }

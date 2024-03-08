@@ -1,27 +1,24 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Repositories\AjustementRepository;
+use App\Http\Controllers\Controller;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 
-class AjustementController extends Controller
+class UserController extends Controller
 {
+    private $userRepository;
 
-    private $ajustementRepository;
+    public function __construct(UserRepository $userRepository) {
 
-    public function __construct(AjustementRepository $ajustementRepository)
-    {
-        $this->ajustementRepository = $ajustementRepository;
+        $this->userRepository = $userRepository;
+
     }
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        $resp = $this->ajustementRepository->ajustement_list();
-
-        return response()->json(['data' => $resp]);
+        //
     }
 
     /**
@@ -29,9 +26,7 @@ class AjustementController extends Controller
      */
     public function store(Request $request)
     {
-        $resp = $this->ajustementRepository->ajustement_store($request);
-
-        return response()->json(['data' => $resp]);
+        //
     }
 
     /**
@@ -56,5 +51,12 @@ class AjustementController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function select_delivery_person_bakehouse() {
+        
+        $resp = $this->userRepository->select_delivery_person_bakehouse();
+
+        return response()->json(['data'=>$resp]);
     }
 }

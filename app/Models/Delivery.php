@@ -8,23 +8,26 @@ use App\Core\Traits\SpatieLogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Ajustement extends Model
+class Delivery extends Model
 {
     use HasFactory;
     use SpatieLogsActivity;
     use UuidGenerator;
     use GetModelByUuid;
 
-
-    protected $table='ajustements';
+    protected $table='deliveries';
     protected $primaryKey="id";
     protected $fillable=[
         'id',
         'reference',
-        'comment',
+        'delivery_person_id',
         'bakehouse_id',
-        'created_at',
-        'updated_at',
+        'total_amount',
+        'paid_amount',
+        'due_amount',
+        'status',
+        'uuid',
+        'note',
         'add_date',
         'added_by',
         'add_ip',
@@ -34,20 +37,19 @@ class Ajustement extends Model
         'is_deleted',
         'delete_ip',
         'delete_date',
-        'uuid'
+        'deleted_at',
+        'created_at',
+        'updated_at',
     ];
 
+    public function delivery_details() {
 
-    public function auteur()
+        return $this->hasMany(DeliveryDetails::class, 'delivery_id', 'id');
+    }
+
+
+    public function delivery_person()
     {
-        return $this->belongsTo(User::class, 'added_by', 'id');
+        return $this->belongsTo(User::class, 'delivery_person_id', 'id');
     }
-
-    public function ajustement_details() {
-
-        return $this->hasMany(AjustementDetails::class, 'ajustement_id', 'id');
-    }
-
-    
 }
-

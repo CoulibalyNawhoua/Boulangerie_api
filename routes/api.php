@@ -1,16 +1,18 @@
 <?php
 
-use App\Http\Controllers\AjustementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RoleConroller;
 use App\Http\Controllers\Api\SaleController;
 use App\Http\Controllers\Api\UnitController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\FamilleController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\DeliveryController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\PermissionConroller;
+use App\Http\Controllers\Api\AjustementController;
 use App\Http\Controllers\Api\OrderReturnController;
 use App\Http\Controllers\Api\ProcurementController;
 use App\Http\Controllers\Api\SousFamilleController;
@@ -19,6 +21,7 @@ use App\Http\Controllers\Api\ProductStockController;
 use App\Http\Controllers\Api\TechnicalSheetController;
 use App\Http\Controllers\Api\ExpenseCategoryController;
 use App\Http\Controllers\Api\ProductionHistoryController;
+use App\Http\Controllers\Api\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +36,9 @@ use App\Http\Controllers\Api\ProductionHistoryController;
 
 Route::group(['middleware'=>'jwt.auth'],function(){
 
+
+    Route::get('/select-delivery-person-bakehouse', [UserController::class, 'select_delivery_person_bakehouse']);
+
     Route::apiResource('products', ProductController::class);
     Route::get('/products-procurement', [ProductController::class, 'product_procurement']);
     Route::get('/products-productions', [ProductController::class, 'product_production']);
@@ -44,6 +50,7 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::apiResource('expenses-categories', ExpenseCategoryController::class);
 
     Route::apiResource('customers', CustomerController::class);
+    Route::get('/select-customer-bakehouse', [CustomerController::class, 'select_customer_by_bakehouse']);
 
     Route::apiResource('suppliers', SupplierController::class);
 
@@ -52,9 +59,8 @@ Route::group(['middleware'=>'jwt.auth'],function(){
 
     Route::apiResource('sous-familles', SousFamilleController::class);
     
-
     Route::apiResource('roles', RoleConroller::class);
-    Route::get('/select-livreur-bakehouse', [RoleConroller::class, 'select_livreur_bakehouse']);
+    
 
     Route::apiResource('permissions', PermissionConroller::class);
     Route::get('permission-select', [PermissionConroller::class, 'permissionSelect']);
@@ -66,6 +72,10 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::apiResource('ajustements', AjustementController::class);
 
     Route::apiResource('returns-orders', OrderReturnController::class);
+
+    Route::apiResource('deliveries', DeliveryController::class);
+
+    Route::apiResource('orders', OrderController::class);
 
     Route::get('/sale-stock', [ProductStockController::class, 'saleStock']);
     Route::get('/production-stock', [ProductStockController::class, 'productionStock']);

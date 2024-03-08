@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use SebastianBergmann\CodeCoverage\Report\Xml\Unit;
 
-class OrdeDetails extends Model
+class OrderDetails extends Model
 {
     use HasFactory;
     use SpatieLogsActivity;
@@ -18,15 +18,8 @@ class OrdeDetails extends Model
         'id',
         'product_id',
         'quantity',
-        'unit_price',
         'price',
-        'sub_total',
         'order_id',
-        'code',
-        'quantity_received',
-        'product_discount_amount',
-        'product_tax_amount',
-        'product_discount_type',
         'unit_id',
         'created_at',
         'updated_at',
