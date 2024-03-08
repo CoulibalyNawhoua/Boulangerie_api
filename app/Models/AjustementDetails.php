@@ -13,7 +13,7 @@ class AjustementDetails extends Model
         'id',
         'before_quantity',
         'after_quantity',
-        'produit_id',
+        'product_id',
         'ajustement_id',
         'quantity',
         'gap',

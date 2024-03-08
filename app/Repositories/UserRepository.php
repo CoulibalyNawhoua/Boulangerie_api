@@ -31,8 +31,45 @@ class UserRepository extends Repository
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
         $input['email'] = $input['email'];
-        $input['entite_id'] = $input['entite_id'];
-        // $input['user_name'] = $input['user_name'];
+        $input['user_name'] = $input['user_name'];
+        $input['added_by'] = Auth::user()->id;
+        $input['add_ip'] = $this->getIp();
+        $input['add_date'] = Carbon::now();
+
+        $user = User::create($input);
+        $user->assignRole($request->input('roles'));
+
+        // $info = UserInfo::where('user_id', $user->id)->first();
+
+        // if ($info === null) {
+        //     $info = new UserInfo();
+        // }
+
+        // // attach this info to the current user
+        // $info->user()->associate(auth()->user());
+
+        // foreach ($request->only(array_keys($request->rules())) as $key => $value) {
+        //     if (is_array($value)) {
+        //         $value = serialize($value);
+        //     }
+        //     $info->$key = $value;
+        // }
+
+        // if ($request->depot_id) {
+        //     $info->entites_id = $request->depot_id;
+        // }
+
+        // $info->save();
+    }
+
+    public function storeAborne(Request $request)
+    {
+
+        $input = $request->all();
+        $input['password'] = Hash::make($input['password']);
+        $input['email'] = $input['email'];
+        $input['bakehouse_id'] = $input['bakehouse_id'];
+        $input['user_name'] = $input['user_name'];
         $input['added_by'] = Auth::user()->id;
         $input['add_ip'] = $this->getIp();
         $input['add_date'] = Carbon::now();
