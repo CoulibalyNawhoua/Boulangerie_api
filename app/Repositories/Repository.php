@@ -133,6 +133,22 @@ class Repository implements RepositoryInterface
     }
 
 
+    public function listUsersRoleHasLivreurByBakehouse()
+    {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+       return User::where('bakehouse_id', $bakehouse_id)
+            ->whereHas('roles', function($q)
+            {
+                $q->where([
+                    ['name','=','livreur']
+                ]);
+            })
+            ->get();
+    }
+
+
 
     public function selectUnit()
     {

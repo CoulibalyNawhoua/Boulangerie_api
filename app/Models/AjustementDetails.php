@@ -18,10 +18,6 @@ class AjustementDetails extends Model
         'quantity',
         'gap',
         'unit_id',
-        'edit_ip',
-        'is_deleted',
-        'delete_ip',
-        'delete_date',
         'created_at',
         'updated_at',
 

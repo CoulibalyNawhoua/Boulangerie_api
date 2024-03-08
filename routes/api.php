@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\AjustementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RoleConroller;
 use App\Http\Controllers\Api\SaleController;
@@ -51,8 +51,10 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::get('/select-unit', [UnitController::class, 'select_unit']);
 
     Route::apiResource('sous-familles', SousFamilleController::class);
+    
 
     Route::apiResource('roles', RoleConroller::class);
+    Route::get('/select-livreur-bakehouse', [RoleConroller::class, 'select_livreur_bakehouse']);
 
     Route::apiResource('permissions', PermissionConroller::class);
     Route::get('permission-select', [PermissionConroller::class, 'permissionSelect']);
@@ -61,6 +63,7 @@ Route::group(['middleware'=>'jwt.auth'],function(){
 
     Route::apiResource('production-histories', ProductionHistoryController::class);
 
+    Route::apiResource('ajustements', AjustementController::class);
 
     Route::apiResource('returns-orders', OrderReturnController::class);
 
