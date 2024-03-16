@@ -35,26 +35,30 @@ class OrderReturnRepository extends Repository
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
 
         $returnItems = $request->input('returnItems');
-
-        $returndata["bakehouse_id"] = $request->input("bakehouse_id");
+        $returndata["bakehouse_id"] = $bakehouse_id;
+        $returndata["date"] = $request->input("date");
+        $returndata["total_amount"] = $request->input("total_amount");
+        $returndata["reference"] = $this->referenceGenerator('Order_return');
         $returndata["delivery_person_id"] = $request->input("delivery_person_id");
         $returndata["added_by"] = Auth::user()->id;
         $returndata["add_ip"] = $this->getIp();
 
+        // dd($returndata);
         $return = OrderReturn::create($returndata);
 
         foreach (json_decode($returnItems) as $item) {
 
-            if ($item->in_stock) {
-                $in_stock = 1;
-            } else {
-                $in_stock = 0;
-            }
-            
+            // if ($item->in_stock) {
+            //     $in_stock = 1;
+            // } else {
+            //     $in_stock = 0;
+            // }
+
             $itemdata['product_id'] = $item->product_id;
             $itemdata['order_return_id'] = $return->id;
             $itemdata['quantity'] = $item->quantity;
-            $itemdata['in_stock'] = $in_stock;
+            $itemdata['price'] = $item->price;
+            $itemdata['in_stock'] = $item->in_stock;
 
 
             OrderReturnDetail::create($itemdata);

@@ -7,6 +7,7 @@ use App\Models\Sale;
 use App\Models\Order;
 use App\Models\Delivery;
 use App\Models\Ajustement;
+use App\Models\OrderReturn;
 use App\Models\Procurement;
 
 trait GeneratedCodeTrait {
@@ -41,6 +42,11 @@ trait GeneratedCodeTrait {
                     $nombre_elt=Delivery::get()->count();
                     $nombre_elt++;
                     $prefix= 'LIV';
+                break;
+                case 'Order_return':
+                    $nombre_elt=OrderReturn::get()->count();
+                    $nombre_elt++;
+                    $prefix= 'CMR';
                 break;
             }
             $code=$prefix.'-'.$code_generer.$nombre_elt;

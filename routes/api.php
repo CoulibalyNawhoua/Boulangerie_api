@@ -58,9 +58,9 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::get('/select-unit', [UnitController::class, 'select_unit']);
 
     Route::apiResource('sous-familles', SousFamilleController::class);
-    
+
     Route::apiResource('roles', RoleConroller::class);
-    
+
 
     Route::apiResource('permissions', PermissionConroller::class);
     Route::get('permission-select', [PermissionConroller::class, 'permissionSelect']);

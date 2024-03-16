@@ -12,14 +12,14 @@ class OrderController extends Controller
 
     public function __construct(OrderRepository $orderRepository){
 
-        $this->$orderRepository = $orderRepository;
+        $this->orderRepository = $orderRepository;
     }
 
     public function index()
     {
         $resp = $this->orderRepository->order_list();
 
-        return response()->json($resp);
+        return response()->json(['data'=>$resp]);
     }
 
     /**

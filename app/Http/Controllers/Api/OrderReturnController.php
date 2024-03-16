@@ -12,7 +12,7 @@ class OrderReturnController extends Controller
 
     public function __construct(OrderReturnRepository $orderReturnRepository){
 
-        $this->$orderReturnRepository = $orderReturnRepository;
+        $this->orderReturnRepository = $orderReturnRepository;
     }
 
     public function index()

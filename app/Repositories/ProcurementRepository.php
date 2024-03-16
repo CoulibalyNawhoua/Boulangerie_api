@@ -134,9 +134,11 @@ class ProcurementRepository extends Repository
             $itemdata['procurement_id'] = $procurement->id;
             $itemdata['quantity'] = $item->quantity;
             $itemdata['unit_price'] = $item->unit_price;
-            $itemdata['product_tax'] = $item->product_tax;
+            // $itemdata['product_tax'] = $item->product_tax;
             $itemdata['product_discount'] = $item->product_discount;
-            $itemdata['sub_total'] = $item->sub_total;
+            // $itemdata['sub_total'] = $item->sub_total;
+
+            ProcurementDetails::create($itemdata);
             if ($status == 1) {
 
                 $stockP = StockProduct::where('product_id', $item->product_id)

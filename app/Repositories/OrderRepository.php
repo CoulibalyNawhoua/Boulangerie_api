@@ -30,6 +30,7 @@ class OrderRepository extends Repository
         $data["bakehouse_id"] = $bakehouse_id;
         $data["customer_id"]= $request->input('customer_id');
         $data["total_amount"] = $request->input('total_amount');
+        $data["status"] = $request->input('status');
         $data["added_by"] = Auth::user()->id;
         $data["add_ip"] = $this->getIp();
 
@@ -38,23 +39,24 @@ class OrderRepository extends Repository
         foreach (json_decode($productItems) as $item) {
 
             $itemdata['product_id'] = $item->product_id;
+            $itemdata['order_id'] = $order->id;
             $itemdata['quantity'] = $item->quantity;
             $itemdata['price'] = $item->price;
-           
+
 
             OrderDetails::create($itemdata);
 
             $stockP = StockProduct::where('product_id', $item->product_id)
                         ->where('bakehouse_id', $bakehouse_id)
                         ->first();
-            $stockP->decrement('quantity', $item->after_quantity);
+            $stockP->decrement('quantity', $item->quantity);
 
             if ($stockP->quantity < 0) {
                 $stockP->update([
                     'quantity' => 0
                 ]);
             }
-     
+
         }
 
         return $order;
@@ -62,7 +64,7 @@ class OrderRepository extends Repository
 
 
     public function order_delete($id) {
-        
+
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
 
         $order = Order::where('id', $id)
@@ -79,17 +81,17 @@ class OrderRepository extends Repository
         ]);
 
         foreach ($orderProducts as $item) {
-            
+
             $stockP = StockProduct::where('product_id', $item->product_id)->first();
 
             $stockP->increment('quantity', $item->quantity);
         }
 
-       
+
     }
 
     public function order_view($uuid) {
-        
+
         $bakehouse_id = (Auth::user()->bakehouse)? Auth::user()->bakehouse->id : NULL ;
 
         $order = Order::where('uuid', $uuid)
@@ -101,7 +103,7 @@ class OrderRepository extends Repository
     }
 
     public function order_list()  {
-        
+
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
 
         $query = Order::where('bakehouse_id', $bakehouse_id)

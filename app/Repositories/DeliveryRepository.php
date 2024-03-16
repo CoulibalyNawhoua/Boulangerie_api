@@ -30,6 +30,7 @@ class DeliveryRepository extends Repository
         $data["bakehouse_id"] = $bakehouse_id;
         $data["delivery_person_id"]= $request->input('delivery_person_id');
         $data["total_amount"] = $request->input('total_amount');
+        $data["status"] = $request->input('status');
         $data["added_by"] = Auth::user()->id;
         $data["add_ip"] = $this->getIp();
 
@@ -39,22 +40,23 @@ class DeliveryRepository extends Repository
 
             $itemdata['product_id'] = $item->product_id;
             $itemdata['quantity'] = $item->quantity;
+            $itemdata['delivery_id'] = $delivery->id;
             $itemdata['price'] = $item->price;
-           
+
 
             DeliveryDetails::create($itemdata);
 
             $stockP = StockProduct::where('product_id', $item->product_id)
                         ->where('bakehouse_id', $bakehouse_id)
                         ->first();
-            $stockP->decrement('quantity', $item->after_quantity);
+            $stockP->decrement('quantity', $item->quantity);
 
             if ($stockP->quantity < 0) {
                 $stockP->update([
                     'quantity' => 0
                 ]);
             }
-     
+
         }
 
         return $delivery;
@@ -62,7 +64,7 @@ class DeliveryRepository extends Repository
 
 
     public function delivery_delete($id) {
-        
+
 
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
 
@@ -80,7 +82,7 @@ class DeliveryRepository extends Repository
         ]);
 
         foreach ($deliveryProducts as $item) {
-            
+
             $stockP = StockProduct::where('product_id', $item->product_id)->first();
 
             $stockP->increment('quantity', $item->quantity);
@@ -89,7 +91,7 @@ class DeliveryRepository extends Repository
 
 
     public function delivery_list()  {
-        
+
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
 
         $query = Delivery::where('bakehouse_id', $bakehouse_id)
@@ -101,7 +103,7 @@ class DeliveryRepository extends Repository
 
 
     public function delivery_view($uuid) {
-        
+
         $bakehouse_id = (Auth::user()->bakehouse)? Auth::user()->bakehouse->id : NULL ;
 
         $delivery = Delivery::where('uuid', $uuid)
