@@ -52,7 +52,7 @@ class AjustementRepository extends Repository
     }
 
     public function ajustement_list()  {
-        
+
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
 
         $query = Ajustement::where('bakehouse_id', $bakehouse_id)
@@ -63,7 +63,7 @@ class AjustementRepository extends Repository
     }
 
     public function ajustement_delete($id) {
-        
+
 
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
 
@@ -81,7 +81,7 @@ class AjustementRepository extends Repository
         ]);
 
         foreach ($ajustementProducts as $item) {
-            
+
             $stockP = StockProduct::where('product_id', $item->product_id)->first();
 
             $stockP->increment('quantity', $item->after_quantity);
@@ -90,7 +90,7 @@ class AjustementRepository extends Repository
 
 
     public function ajustement_view($uuid) {
-        
+
         $bakehouse_id = (Auth::user()->bakehouse)? Auth::user()->bakehouse->id : NULL ;
 
         $ajustement = Ajustement::where('uuid', $uuid)
@@ -99,5 +99,19 @@ class AjustementRepository extends Repository
                 ->first();
 
         return $ajustement;
+    }
+
+    public function ajustement_details()  {
+
+
+        $bakehouse_id = (Auth::user()->bakehouse)? Auth::user()->bakehouse->id : NULL ;
+
+        $query = AjustementDetails::where('ajustements.bakehouse_id', $bakehouse_id)
+                    ->leftJoin('ajustements','ajustements.id', '=', 'ajustements_details.ajustement_id')
+                    ->leftJoin('products','products.id', '=', 'ajustements_details.product_id')
+                    ->where('ajustements.is_deleted', 0)
+                    ->get();
+
+        return $query;
     }
 }
