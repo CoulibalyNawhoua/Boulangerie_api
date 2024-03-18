@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderReturnDetail extends Model
 {
-    protected $table='ajustements_details';
+    // protected $table='ajustements_details';
+    protected $table='order_return_details';
     protected $primaryKey="id";
     protected $fillable=[
         'id',

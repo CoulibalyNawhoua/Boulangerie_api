@@ -69,6 +69,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $uuid)
     {
+        // dd($request->image);
         $resp = $this->productRepository->productUpdate($request, $uuid);
 
         return response()->json(['data' => $resp]);

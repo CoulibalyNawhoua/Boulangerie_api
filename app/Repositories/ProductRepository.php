@@ -70,7 +70,7 @@ class ProductRepository extends Repository
         'bakehouse_id' => $bakehouse_id,
         'price' =>  $price,
         'type' => $type,
-        'quantity' => $quantity,
+        // 'quantity' => $quantity,
         'unit_id' => $unit_id,
     ]);
 
@@ -111,11 +111,11 @@ class ProductRepository extends Repository
             'stock_alert' => $stock_alert,
             'price' => $price,
             // 'cost' => $cost,
-            'unit_id' => $unit_id,
+            // 'unit_id' => $unit_id,
             'image' => $image_url,
-            'sous_famille_id' => $sous_famille_id,
+            // 'sous_famille_id' => $sous_famille_id,
             'added_by' => Auth::user()->id,
-            'type' => $type,
+            // 'type' => $type,
             'add_ip' => $this->getIp(),
         ]);
 

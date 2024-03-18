@@ -12,7 +12,7 @@ class OrderReturnController extends Controller
 
     public function __construct(OrderReturnRepository $orderReturnRepository){
 
-        $this->$orderReturnRepository = $orderReturnRepository;
+        $this->orderReturnRepository = $orderReturnRepository;
     }
 
     public function index()
@@ -56,6 +56,8 @@ class OrderReturnController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $resp = $this->orderReturnRepository->order_return_delete($id);
+
+        return response()->json(['data' => $resp]);
     }
 }

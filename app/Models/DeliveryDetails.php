@@ -11,7 +11,7 @@ class DeliveryDetails extends Model
     use HasFactory;
     use SpatieLogsActivity;
 
-    protected $table='order_details';
+    protected $table='delivery_details';
     protected $primaryKey="id";
     protected $fillable=[
         'id',
@@ -19,7 +19,13 @@ class DeliveryDetails extends Model
         'quantity',
         'price',
         'unit_id',
+        'delivery_id',
         'created_at',
         'updated_at',
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id','id');
+    }
 }

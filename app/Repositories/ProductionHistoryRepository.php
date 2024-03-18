@@ -17,14 +17,14 @@ class ProductionHistoryRepository extends Repository
     {
         $this->model=$model;
     }
-    
+
 
     public function ProductionHistoryList() {
 
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
 
         $query = ProductHistory::leftJoin('products', 'products.id', '=', 'products_histories.product_id')
-                ->selectRaw('products.name, products.image, products_histories.quantity, products_histories.add_date')
+                ->selectRaw('products.name,products.price, products.image, products_histories.quantity, products_histories.add_date')
                 ->where('products_histories.bakehouse_id', $bakehouse_id)
                 ->where('products_histories.is_deleted', 0)
                 ->get();
@@ -51,5 +51,19 @@ class ProductionHistoryRepository extends Repository
 
         $productInStk->increment('quantity', $request->quantity);
 
+    }
+
+    public function ProductionHistoryListDetail($uuid) {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        $query = ProductHistory::leftJoin('products', 'products.id', '=', 'products_histories.product_id')
+                ->selectRaw('products.name,products.price, products.image, products_histories.quantity, products_histories.add_date')
+                ->where('products_histories.bakehouse_id', $bakehouse_id)
+                ->where('products.uuid', $uuid)
+                ->where('products_histories.is_deleted', 0)
+                ->get();
+
+        return $query;
     }
 }

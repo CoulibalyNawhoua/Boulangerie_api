@@ -22,7 +22,9 @@ class OrderReturn extends Model
         'id',
         'reference',
         'comment',
+        'date',
         'order_id',
+        'total_amount',
         'bakehouse_id',
         'created_at',
         'updated_at',
@@ -35,6 +37,7 @@ class OrderReturn extends Model
         'is_deleted',
         'delete_ip',
         'delete_date',
+        'delivery_person_id',
         'uuid'
     ];
 

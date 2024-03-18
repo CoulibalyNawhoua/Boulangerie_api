@@ -12,14 +12,14 @@ class OrderController extends Controller
 
     public function __construct(OrderRepository $orderRepository){
 
-        $this->$orderRepository = $orderRepository;
+        $this->orderRepository = $orderRepository;
     }
 
     public function index()
     {
         $resp = $this->orderRepository->order_list();
 
-        return response()->json($resp);
+        return response()->json(['data'=>$resp]);
     }
 
     /**
@@ -72,6 +72,13 @@ class OrderController extends Controller
     public function destroy(string $id)
     {
         $resp = $this->orderRepository->order_delete($id);
+
+        return response()->json(['data' => $resp]);
+    }
+    // AMBEU 17/03/2024
+    public function orderValidate(String $id){
+
+        $resp = $this->orderRepository->order_validate($id);
 
         return response()->json(['data' => $resp]);
     }

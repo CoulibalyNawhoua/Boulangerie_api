@@ -20,7 +20,7 @@ class StockProduitRepository extends Repository
 
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
 
-        $query = StockProduct::selectRaw('products.price, products_stock.product_id, products_stock.id, products.name AS product_name, products.image, products_stock.quantity')
+        $query = StockProduct::selectRaw('products.uuid,products.price, products_stock.product_id, products_stock.id, products.name AS product_name, products.image, products_stock.quantity')
                     ->where('products.type', 1)
                     ->where('products_stock.bakehouse_id', $bakehouse_id)
                     ->leftJoin('products', 'products.id', '=', 'products_stock.product_id')
