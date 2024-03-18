@@ -162,7 +162,7 @@ class DeliveryRepository extends Repository
                                     ->leftJoin('deliveries', 'deliveries.id', '=', 'delivery_details.delivery_id')
                                     ->leftJoin('products', 'products.id', '=', 'delivery_details.product_id')
                                     ->where('deliveries.delivery_person_id', Auth::user()->id)
-                                    ->groupBy(DB::raw("(DATE_FORMAT(created_at,'%Y-%m-%d'))"), 'products.id', 'products.name', 'products.image')
+                                    ->groupBy(DB::raw("(DATE_FORMAT(deliveries.created_at,'%Y-%m-%d'))"), 'products.id', 'products.name', 'products.image')
                                     ->get();
 
             return $query;
