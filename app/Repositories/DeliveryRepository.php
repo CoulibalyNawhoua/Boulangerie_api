@@ -162,7 +162,8 @@ class DeliveryRepository extends Repository
                                     ->leftJoin('deliveries', 'deliveries.id', '=', 'delivery_details.delivery_id')
                                     ->leftJoin('products', 'products.id', '=', 'delivery_details.product_id')
                                     ->where('deliveries.delivery_person_id', Auth::user()->id)
-                                    ->where(DB::raw("(DATE_FORMAT(deliveries.created_at,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'))
+                                    // ->where(DB::raw("(DATE_FORMAT(deliveries.created_at,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'))
+                                    ->whereRaw("DATE(deliveries.created_at) = CURDATE()")
                                     ->groupBy('products.id', 'products.name', 'products.image')
                                     ->get();
 
