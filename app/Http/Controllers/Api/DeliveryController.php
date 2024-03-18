@@ -66,4 +66,11 @@ class DeliveryController extends Controller
 
         return response()->json(['data' => $resp]);
     }
+
+    public function delivery_by_date()  {
+
+        $resp = $this->deliveryRepository->delivery_by_date();
+
+        return response()->json(['data' => $resp]);
+    }
 }

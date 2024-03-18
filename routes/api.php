@@ -97,6 +97,10 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::delete('/sale-delete/{id}', [SaleController::class, 'saleDestroy']);
 
 
+    ///api mobile
+    Route::get('/deliveries-by-date', [DeliveryController::class, 'delivery_by_date']);
+
+
 });
 
 Route::post('/signin', [WebAuthController::class, 'signin']);
