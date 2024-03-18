@@ -111,7 +111,7 @@ class AjustementRepository extends Repository
                     ->where('ajustements.is_deleted', 0)
                     ->leftJoin('ajustements','ajustements.id', '=', 'ajustements_details.ajustement_id')
                     ->leftJoin('products','products.id', '=', 'ajustements_details.product_id')
-                    ->selectRaw('products.name, ajustements_details.before_quantity, ajustements_details.after_quantity, ajustements_details.quantity, ajustements_details.gap, ajustements.created_at')
+                    ->selectRaw('products.name, ajustements_details.before_quantity, ajustements_details.after_quantity, ajustements_details.quantity, ajustements_details.gap, ajustements.created_at, products.image')
                     ->get();
 
         return $query;
