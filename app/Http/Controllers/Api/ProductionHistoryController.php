@@ -56,4 +56,12 @@ class ProductionHistoryController extends Controller
     {
         //
     }
+
+    public function details_history_products(String $uuid)
+    {
+        $resp = $this->productionHistoryRepository->ProductionHistoryListDetail($uuid);
+
+        return response()->json(['data' => $resp]);
+    }
+
 }

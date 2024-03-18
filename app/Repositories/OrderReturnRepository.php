@@ -25,6 +25,7 @@ class OrderReturnRepository extends Repository
 
        return  OrderReturn::where('is_deleted', 0)
                 ->where('bakehouse_id', $bakehouse_id)
+                ->with(['order_return_details.product','livreur'])
                 ->get();
     }
 
@@ -64,7 +65,7 @@ class OrderReturnRepository extends Repository
             OrderReturnDetail::create($itemdata);
 
 
-            if ($item->in_stock) {
+            if ($item->in_stock == 1) {
 
                 $stockP = StockProduct::where('product_id', $item->product_id)
                     ->where('bakehouse_id', $bakehouse_id)
@@ -88,5 +89,44 @@ class OrderReturnRepository extends Repository
         return OrderReturn::where('order_returns.uuid', $uuid)
                             ->where('order_returns.bakehouse_id', $bakehouse_id)
                             ->with(['order_return_details.product','livreur'])->first();
+    }
+
+    public function order_return_delete($id)  {
+
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        $return = OrderReturn::where('id',$id)
+                                ->where('bakehouse_id', $bakehouse_id)
+                                ->first();
+
+        $return->update([
+                    'deleted_by'=> Auth::user()->id,
+                    'delete_date' => Carbon::now(),
+                    'is_deleted'=>1,
+                    'delete_ip' => $this->getIp()
+                ]);
+
+        $returnItems = OrderReturnDetail::where('order_return_id', $return->id)->get();
+
+        foreach (json_decode($returnItems) as $item) {
+
+            if ($item->in_stock == 1) {
+
+                $stockP = StockProduct::where('product_id', $item->product_id)->first();
+
+                $stockP->decrement('quantity', $item->quantity);
+
+                if ($stockP->quantity < 0) {
+                    $stockP->update([
+                        'quantity' => 0
+                    ]);
+                }
+
+            }
+
+        }
+
+        return $return;
     }
 }

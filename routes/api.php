@@ -40,6 +40,7 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::get('/select-delivery-person-bakehouse', [UserController::class, 'select_delivery_person_bakehouse']);
 
     Route::apiResource('products', ProductController::class);
+    Route::post('/products-update/{uuid}', [ProductController::class,'update']);
     Route::get('/products-procurement', [ProductController::class, 'product_procurement']);
     Route::get('/products-productions', [ProductController::class, 'product_production']);
 
@@ -68,14 +69,17 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::apiResource('technical-sheet', TechnicalSheetController::class);
 
     Route::apiResource('production-histories', ProductionHistoryController::class);
+    Route::get('/production-histories-details/{uuid}', [ProductionHistoryController::class, 'details_history_products']);
 
     Route::apiResource('ajustements', AjustementController::class);
 
     Route::apiResource('returns-orders', OrderReturnController::class);
 
     Route::apiResource('deliveries', DeliveryController::class);
+    Route::get('/deliveries-validate/{id}', [DeliveryController::class, 'deliveryValidate']);
 
     Route::apiResource('orders', OrderController::class);
+    Route::get('/orders-validate/{id}', [OrderController::class, 'orderValidate']);
 
     Route::get('/sale-stock', [ProductStockController::class, 'saleStock']);
     Route::get('/production-stock', [ProductStockController::class, 'productionStock']);

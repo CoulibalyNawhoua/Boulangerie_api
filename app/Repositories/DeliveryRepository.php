@@ -45,18 +45,18 @@ class DeliveryRepository extends Repository
 
 
             DeliveryDetails::create($itemdata);
+            if($request->input('status') == 1){
+                $stockP = StockProduct::where('product_id', $item->product_id)
+                            ->where('bakehouse_id', $bakehouse_id)
+                            ->first();
+                $stockP->decrement('quantity', $item->quantity);
 
-            $stockP = StockProduct::where('product_id', $item->product_id)
-                        ->where('bakehouse_id', $bakehouse_id)
-                        ->first();
-            $stockP->decrement('quantity', $item->quantity);
-
-            if ($stockP->quantity < 0) {
-                $stockP->update([
-                    'quantity' => 0
-                ]);
+                if ($stockP->quantity < 0) {
+                    $stockP->update([
+                        'quantity' => 0
+                    ]);
+                }
             }
-
         }
 
         return $delivery;
@@ -80,12 +80,13 @@ class DeliveryRepository extends Repository
             'is_deleted'=>1,
             'delete_ip' => $this->getIp()
         ]);
+        if($delivery->status == 1){
+            foreach ($deliveryProducts as $item) {
 
-        foreach ($deliveryProducts as $item) {
+                $stockP = StockProduct::where('product_id', $item->product_id)->first();
 
-            $stockP = StockProduct::where('product_id', $item->product_id)->first();
-
-            $stockP->increment('quantity', $item->quantity);
+                $stockP->increment('quantity', $item->quantity);
+            }
         }
     }
 
@@ -96,6 +97,7 @@ class DeliveryRepository extends Repository
 
         $query = Delivery::where('bakehouse_id', $bakehouse_id)
                         ->where('is_deleted', 0)
+                        ->with(['delivery_person'])
                         ->get();
 
         return $query;
@@ -113,5 +115,41 @@ class DeliveryRepository extends Repository
 
         return $delivery;
     }
+
+        // AMBEU 17/03/2024
+        public function delivery_validate($id) {
+
+            $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+            $delivery = Delivery::where('id', $id)
+                    ->where('bakehouse_id', $bakehouse_id)
+                    ->first();
+
+
+                $delivery->update([
+                    'deleted_by'=> Auth::user()->id,
+                    'delete_date' => Carbon::now(),
+                    'status'=>1,
+                    'delete_ip' => $this->getIp()
+                ]);
+
+            $deliveryProducts = DeliveryDetails::where('delivery_id', $delivery->id)->get();
+            // dd($orderProducts);
+            foreach ($deliveryProducts as $item) {
+
+                $stockP = StockProduct::where('product_id', $item->product_id)->first();
+
+                $stockP->decrement('quantity', $item->quantity);
+
+                if ($stockP->quantity < 0) {
+                    $stockP->update([
+                        'quantity' => 0
+                    ]);
+                }
+            }
+
+
+
+        }
 
 }

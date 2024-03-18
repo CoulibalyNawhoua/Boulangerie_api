@@ -36,6 +36,7 @@ class OrderRepository extends Repository
 
         $order = Order::create($data);
 
+
         foreach (json_decode($productItems) as $item) {
 
             $itemdata['product_id'] = $item->product_id;
@@ -45,19 +46,22 @@ class OrderRepository extends Repository
 
 
             OrderDetails::create($itemdata);
+            if($request->input('status') == 1){
+                $stockP = StockProduct::where('product_id', $item->product_id)
+                            ->where('bakehouse_id', $bakehouse_id)
+                            ->first();
+                $stockP->decrement('quantity', $item->quantity);
 
-            $stockP = StockProduct::where('product_id', $item->product_id)
-                        ->where('bakehouse_id', $bakehouse_id)
-                        ->first();
-            $stockP->decrement('quantity', $item->quantity);
+                if ($stockP->quantity < 0) {
+                    $stockP->update([
+                        'quantity' => 0
+                    ]);
+                }
 
-            if ($stockP->quantity < 0) {
-                $stockP->update([
-                    'quantity' => 0
-                ]);
             }
 
         }
+
 
         return $order;
     }
@@ -71,7 +75,7 @@ class OrderRepository extends Repository
                     ->where('bakehouse_id', $bakehouse_id)
                     ->first();
 
-        $orderProducts = OrderDetails::where('delivery_id', $order->id)->get();
+
 
         $order->update([
             'deleted_by'=> Auth::user()->id,
@@ -79,13 +83,16 @@ class OrderRepository extends Repository
             'is_deleted'=>1,
             'delete_ip' => $this->getIp()
         ]);
+        if($order->status == 1){
+            $orderProducts = OrderDetails::where('order_id', $order->id)->get();
+            foreach ($orderProducts as $item) {
 
-        foreach ($orderProducts as $item) {
+                $stockP = StockProduct::where('product_id', $item->product_id)->first();
 
-            $stockP = StockProduct::where('product_id', $item->product_id)->first();
-
-            $stockP->increment('quantity', $item->quantity);
+                $stockP->increment('quantity', $item->quantity);
+            }
         }
+
 
 
     }
@@ -108,9 +115,47 @@ class OrderRepository extends Repository
 
         $query = Order::where('bakehouse_id', $bakehouse_id)
                         ->where('is_deleted', 0)
+                        ->with(['customer'])
                         ->get();
 
         return $query;
+    }
+
+    // AMBEU 17/03/2024
+    public function order_validate($id) {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        $order = Order::where('id', $id)
+                    ->where('bakehouse_id', $bakehouse_id)
+                    ->first();
+
+
+
+        $order->update([
+            'deleted_by'=> Auth::user()->id,
+            'delete_date' => Carbon::now(),
+            'status' => 1,
+            'delete_ip' => $this->getIp()
+        ]);
+
+        $orderProducts = OrderDetails::where('order_id', $order->id)->get();
+        // dd($orderProducts);
+        foreach ($orderProducts as $item) {
+
+            $stockP = StockProduct::where('product_id', $item->product_id)->first();
+
+            $stockP->decrement('quantity', $item->quantity);
+
+            if ($stockP->quantity < 0) {
+                $stockP->update([
+                    'quantity' => 0
+                ]);
+            }
+        }
+
+
+
     }
 
 

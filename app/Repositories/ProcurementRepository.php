@@ -76,9 +76,18 @@ class ProcurementRepository extends Repository
                             ->first();
 
                 if (is_null($stockP)) {
+                    // StockProduct::create([
+                    //     'product_id' => $item->quantity,
+                    //     'bakehouse_id' => $bakehouse_id
+                    // ]);
+
                     StockProduct::create([
-                        'product_id' => $item->quantity,
-                        'bakehouse_id' => $bakehouse_id
+                        'quantity' => $item->quantity,
+                        'product_id' => $item->product_id,
+                        'bakehouse_id' => $bakehouse_id,
+                        'price' =>  $item->unit_price,
+                        'type' => 0,
+                        // 'unit_id' => $unit_id,
                     ]);
                 } else {
 
@@ -146,9 +155,18 @@ class ProcurementRepository extends Repository
                             ->first();
 
                 if (is_null($stockP)) {
+                    // StockProduct::create([
+                    //     'product_id' => $item->quantity,
+                    //     'bakehouse_id' => $bakehouse_id
+                    // ]);
+
                     StockProduct::create([
-                        'product_id' => $item->quantity,
-                        'bakehouse_id' => $bakehouse_id
+                        'quantity' => $item->quantity,
+                        'product_id' => $item->product_id,
+                        'bakehouse_id' => $bakehouse_id,
+                        'price' =>  $item->unit_price,
+                        'type' => 0,
+                        // 'unit_id' => $unit_id,
                     ]);
                 } else {
 

@@ -75,4 +75,11 @@ class OrderController extends Controller
 
         return response()->json(['data' => $resp]);
     }
+    // AMBEU 17/03/2024
+    public function orderValidate(String $id){
+
+        $resp = $this->orderRepository->order_validate($id);
+
+        return response()->json(['data' => $resp]);
+    }
 }

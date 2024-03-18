@@ -37,6 +37,7 @@ class OrderReturn extends Model
         'is_deleted',
         'delete_ip',
         'delete_date',
+        'delivery_person_id',
         'uuid'
     ];
 

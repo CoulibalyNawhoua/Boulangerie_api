@@ -56,7 +56,14 @@ class DeliveryController extends Controller
     public function destroy(string $id)
     {
         $res= $this->deliveryRepository->delivery_delete($id);
-        
+
         return response()->json(['data' => $res]);
+    }
+
+    public function deliveryValidate(String $id){
+
+        $resp = $this->deliveryRepository->delivery_validate($id);
+
+        return response()->json(['data' => $resp]);
     }
 }
