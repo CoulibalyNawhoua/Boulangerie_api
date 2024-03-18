@@ -62,4 +62,11 @@ class AjustementController extends Controller
 
         return response()->json(['data' => $resp]);
     }
+
+    public function ajustements_details()  {
+        
+        $resp = $this->ajustementRepository->ajustement_details();
+
+        return response()->json(['data' => $resp]);
+    }
 }

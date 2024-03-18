@@ -37,6 +37,7 @@ class AjustementRepository extends Repository
             $itemdata['before_quantity'] = $item->before_quantity;
             $itemdata['after_quantity'] = $item->after_quantity;
             $itemdata['ajustement_id'] = $ajustement->id;
+            $itemdata['gap'] = $item->before_quantity - $item->after_quantity ;
 
             AjustementDetails::create($itemdata);
 
@@ -107,9 +108,10 @@ class AjustementRepository extends Repository
         $bakehouse_id = (Auth::user()->bakehouse)? Auth::user()->bakehouse->id : NULL ;
 
         $query = AjustementDetails::where('ajustements.bakehouse_id', $bakehouse_id)
+                    ->where('ajustements.is_deleted', 0)
                     ->leftJoin('ajustements','ajustements.id', '=', 'ajustements_details.ajustement_id')
                     ->leftJoin('products','products.id', '=', 'ajustements_details.product_id')
-                    ->where('ajustements.is_deleted', 0)
+                    ->selectRaw('products.name, ajustements_details.before_quantity, ajustements_details.after_quantity, ajustements_details.quantity, ajustements_details.gap')
                     ->get();
 
         return $query;

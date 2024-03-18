@@ -72,6 +72,7 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::get('/production-histories-details/{uuid}', [ProductionHistoryController::class, 'details_history_products']);
 
     Route::apiResource('ajustements', AjustementController::class);
+    Route::get('ajustements-details', [AjustementController::class, 'ajustements_details']);
 
     Route::apiResource('returns-orders', OrderReturnController::class);
 
