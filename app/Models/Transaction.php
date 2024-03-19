@@ -23,6 +23,7 @@ class Transaction extends Model
         'reference',
         'total_amount',
         'amount',
+        'type_payment',
         'customer_id',
         'bakehouse_id',
         'delivery_person_id',
