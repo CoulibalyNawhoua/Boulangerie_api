@@ -3,12 +3,13 @@
 namespace App\Repositories;
 
 use Carbon\Carbon;
+use App\Models\Order;
 use App\Models\Delivery;
 use App\Models\StockProduct;
 use Illuminate\Http\Request;
 use App\Models\DeliveryDetails;
-use App\Models\Order;
 use App\Repositories\Repository;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class DeliveryRepository extends Repository
@@ -150,6 +151,23 @@ class DeliveryRepository extends Repository
 
 
 
+        }
+
+
+        public function delivery_by_date() {
+
+            $bakehouse_id = (Auth::user()->bakehouse)? Auth::user()->bakehouse->id : NULL ;
+
+            $query = DeliveryDetails::selectRaw('SUM(delivery_details.quantity) as total_quantity, products.name, products.image')
+                                    ->leftJoin('deliveries', 'deliveries.id', '=', 'delivery_details.delivery_id')
+                                    ->leftJoin('products', 'products.id', '=', 'delivery_details.product_id')
+                                    ->where('deliveries.delivery_person_id', Auth::user()->id)
+                                    // ->where(DB::raw("(DATE_FORMAT(deliveries.created_at,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'))
+                                    ->whereRaw("DATE(deliveries.created_at) = CURDATE()")
+                                    ->groupBy('products.id', 'products.name', 'products.image')
+                                    ->get();
+
+            return $query;
         }
 
 }
