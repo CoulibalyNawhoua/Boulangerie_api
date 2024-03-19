@@ -35,14 +35,16 @@ class SaleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $uuid)
     {
-        //
+        $resp = $this->saleRepository->saleView($uuid);
+
+        return response()->json(['data' => $resp]);
     }
 
     public function saleView(string $uuid)
     {
-        $resp = $this->saleRepository->findByUuid($uuid);
+        $resp = $this->saleRepository->saleView($uuid);
 
         return response()->json(['data' => $resp]);
     }

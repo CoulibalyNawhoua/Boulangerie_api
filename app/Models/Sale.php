@@ -25,6 +25,7 @@ class Sale extends Model
         'total_amount',
         'paid_amount',
         'due_amount',
+        'balance',
         'payment_date',
         'status',
         'payment_status',
@@ -50,5 +51,10 @@ class Sale extends Model
     public function auteur()
     {
         return $this->belongsTo(User::class, 'added_by', 'id');
+    }
+
+    public function sale_details()
+    {
+        return $this->hasMany(SaleDetails::class, 'sale_id', 'id');
     }
 }
