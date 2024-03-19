@@ -25,6 +25,7 @@ class SaleRepository extends Repository
 
         return Sale::where('is_deleted', 0)
                 ->where('bakehouse_id', $bakehouse_id)
+                ->with('auteur')
                 ->withCount('sale_details')
                 ->get();
     }
