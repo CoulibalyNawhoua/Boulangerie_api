@@ -95,6 +95,7 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::post('sale-store', [SaleController::class, 'saleStore']);
     Route::get('/sale/view/{uuid}', [SaleController::class, 'saleView']);
     Route::delete('/sale-delete/{id}', [SaleController::class, 'saleDestroy']);
+    Route::get('/sale-sum-today', [SaleController::class, 'saleSum']);
 
 
     ///api mobile

@@ -67,4 +67,11 @@ class SaleController extends Controller
 
         return response()->json(['data' => $resp]);
     }
+
+    public function saleSum()
+    {
+        $resp = $this->saleRepository->saleUserToday();
+
+        return response()->json(['data' => $resp]);
+    }
 }

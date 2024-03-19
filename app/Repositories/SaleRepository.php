@@ -108,4 +108,16 @@ class SaleRepository extends Repository
                 ->with(['auteur','sale_details.product'])
                 ->first();
     }
+
+    public function saleUserToday()  {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        return Sale::where('bakehouse_id', $bakehouse_id)
+                ->where('added_by', Auth::user()->id)
+                ->whereDate('created_at', Carbon::now())
+                ->sum('total_amount');
+    }
+
+
 }
