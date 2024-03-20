@@ -156,13 +156,13 @@ class DeliveryRepository extends Repository
 
             $bakehouse_id = (Auth::user()->bakehouse)? Auth::user()->bakehouse->id : NULL ;
 
-            $query = DeliveryDetails::selectRaw('SUM(delivery_details.quantity) as total_quantity, products.name, products.image, DATE(deliveries.created_at)')
+            $query = DeliveryDetails::selectRaw('SUM(delivery_details.quantity) as total_quantity, products.name, products.image, deliveries.created_at')
                                     ->leftJoin('deliveries', 'deliveries.id', '=', 'delivery_details.delivery_id')
                                     ->leftJoin('products', 'products.id', '=', 'delivery_details.product_id')
                                     ->where('deliveries.delivery_person_id', Auth::user()->id)
                                     // ->where(DB::raw("(DATE_FORMAT(deliveries.created_at,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'))
                                     ->whereRaw("DATE(deliveries.created_at) = CURDATE()")
-                                    ->groupBy('products.id', 'products.name', 'products.image','DATE(deliveries.created_at)')
+                                    ->groupBy('products.id', 'products.name', 'products.image','deliveries.created_at')
                                     ->get();
 
             return $query;
