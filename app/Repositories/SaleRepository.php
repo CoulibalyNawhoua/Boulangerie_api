@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\ProductHistory;
 use App\Models\Sale;
 use App\Models\SaleDetails;
+use App\Models\StockProduct;
 use App\Models\StockProduction;
 use Illuminate\Http\Request;
 use App\Repositories\Repository;
@@ -20,7 +21,13 @@ class SaleRepository extends Repository
 
     public function saleList() {
 
-        return Sale::where('is_deleted', 0)->get();
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        return Sale::where('is_deleted', 0)
+                ->where('bakehouse_id', $bakehouse_id)
+                ->with('auteur')
+                ->withCount('sale_details')
+                ->get();
     }
 
     public function saleStore(Request $request)  {
@@ -44,7 +51,8 @@ class SaleRepository extends Repository
         $saledata["customer_id"] = $request->input("customer_id");
         $saledata["paid_amount"] = $request->input("paid_amount");
         $saledata["total_amount"] = $request->input("total_amount");
-        $saledata["due_amount"] = $request->input("due_amount");
+        $saledata["due_amount"] = $due_amount;
+        $saledata["balance"] = $request->input("balance");
         $saledata["reference"] = $this->referenceGenerator('Sale');
         $saledata["bakehouse_id"] = $bakehouse_id;
         $saledata["payment_status"] = $payment_status;
@@ -64,7 +72,7 @@ class SaleRepository extends Repository
 
             SaleDetails::create($itemdata);
 
-            $stockP = StockProduction::where('product_id', $item->product_id)
+            $stockP = StockProduct::where('product_id', $item->product_id)
                         ->where('bakehouse_id', $bakehouse_id)
                         ->first();
 
@@ -89,5 +97,15 @@ class SaleRepository extends Repository
         }
 
         return $sale;
+    }
+
+    public function saleView($uuid)  {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        return Sale::where('bakehouse_id', $bakehouse_id)
+                ->where('uuid', $uuid)
+                ->with(['auteur','sale_details.product'])
+                ->first();
     }
 }

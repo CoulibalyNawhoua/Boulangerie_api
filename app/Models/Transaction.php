@@ -8,31 +8,28 @@ use App\Core\Traits\SpatieLogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Sale extends Model
+class Transaction extends Model
 {
     use HasFactory;
     use SpatieLogsActivity;
     use UuidGenerator;
     use GetModelByUuid;
 
-    protected $table='sales';
+
+    protected $table='transactions';
     protected $primaryKey="id";
     protected $fillable=[
         'id',
         'reference',
+        'total_amount',
+        'amount',
+        'type_payment',
         'customer_id',
         'bakehouse_id',
-        'total_amount',
-        'paid_amount',
-        'due_amount',
-        'balance',
-        'payment_date',
-        'status',
-        'payment_status',
-        'payment_method',
-        'document',
-        'uuid',
+        'delivery_person_id',
         'note',
+        'created_at',
+        'updated_at',
         'add_date',
         'added_by',
         'add_ip',
@@ -42,19 +39,6 @@ class Sale extends Model
         'is_deleted',
         'delete_ip',
         'delete_date',
-        'deleted_at',
-        'created_at',
-        'updated_at',
+
     ];
-
-
-    public function auteur()
-    {
-        return $this->belongsTo(User::class, 'added_by', 'id');
-    }
-
-    public function sale_details()
-    {
-        return $this->hasMany(SaleDetails::class, 'sale_id', 'id');
-    }
 }

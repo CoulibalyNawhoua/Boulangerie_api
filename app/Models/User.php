@@ -4,15 +4,19 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Sanctum\HasApiTokens;
+use App\Core\Traits\UuidGenerator;
+use App\Core\Traits\GetModelByUuid;
 use Spatie\Permission\Traits\HasRoles;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use UuidGenerator;
+    use GetModelByUuid;
 
     /**
      * The attributes that are mass assignable.
@@ -28,6 +32,7 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'bakehouse_id',
         'active',
+        'uuid'
     ];
 
     /**
