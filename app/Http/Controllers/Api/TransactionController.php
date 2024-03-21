@@ -65,9 +65,23 @@ class TransactionController extends Controller
         return response()->json(['data'=>$resp]);
     }
 
+    public function versement_customers()
+    {
+        $resp = $this->transactionRepository->list_versement_customers();
+
+        return response()->json(['data'=>$resp]);
+    }
+
     public function versement_delivery_view($id)
     {
         $resp = $this->transactionRepository->view_versement_delivery($id);
+
+        return response()->json(['data'=>$resp]);
+    }
+
+    public function versement_customers_view($id)
+    {
+        $resp = $this->transactionRepository->views_versement_customers($id);
 
         return response()->json(['data'=>$resp]);
     }

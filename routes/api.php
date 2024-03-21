@@ -99,7 +99,9 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::get('/sale-sum-today', [SaleController::class, 'saleSum']);
 
     Route::get('/transactions/versement-deliveries', [TransactionController::class, 'versement_delivery']);
+    Route::get('/transactions/versement-customers', [TransactionController::class, 'versement_customers']);
     Route::get('/transactions/versement-view-delivries/{id}', [TransactionController::class, 'versement_delivery_view']);
+    Route::get('/transactions/versement-view-customers/{id}', [TransactionController::class, 'versement_customers_view']);
 
     Route::get('/transactions/deliveries/{id}', [TransactionController::class, 'DeliveryView']);
     Route::get('/transactions/customers/{id}', [TransactionController::class, 'CustomersView']);

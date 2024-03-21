@@ -26,6 +26,7 @@ class ProductionHistoryRepository extends Repository
         $query = ProductHistory::leftJoin('products', 'products.id', '=', 'products_histories.product_id')
                 ->selectRaw('products.name,products.price, products.image, products_histories.quantity, products_histories.add_date')
                 ->where('products_histories.bakehouse_id', $bakehouse_id)
+                ->where('products.type', 0)
                 ->where('products_histories.is_deleted', 0)
                 ->get();
 

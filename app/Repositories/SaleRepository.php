@@ -7,6 +7,7 @@ use App\Models\Sale;
 use App\Models\SaleDetails;
 use App\Models\StockProduct;
 use App\Models\StockProduction;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Repositories\Repository;
 use Carbon\Carbon;
@@ -94,7 +95,19 @@ class SaleRepository extends Repository
                 'added_by' => Auth::user()->id,
                 'add_ip' => $this->getIp(),
             ]);
+
+
         }
+        Transaction::create([
+            "reference" => $this->referenceGenerator('Transaction'),
+            "bakehouse_id" =>  $bakehouse_id,
+            "total_amount" => $request->input('total_amount'),
+            "type_payment" => 0,
+            "note" => "vente caisse",
+            "add_date" => Carbon::now(),
+            "added_by" =>  Auth::user()->id,
+            "add_ip" => $this->getIp()
+        ]);
 
         return $sale;
     }

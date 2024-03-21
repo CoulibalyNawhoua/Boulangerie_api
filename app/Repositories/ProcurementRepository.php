@@ -93,6 +93,16 @@ class ProcurementRepository extends Repository
 
                     $stockP->increment('quantity', $item->quantity);
                 }
+
+                ProductHistory::create([
+                    'quantity' => $item->quantity,
+                    'price' => $item->unit_price,
+                    'type' => 1, // procurement,
+                    'bakehouse_id' => $bakehouse_id,
+                    'product_id' => $item->product_id,
+                    'added_by' => Auth::user()->id,
+                    'add_ip' => $this->getIp(),
+                ]);
             }
         }
 
@@ -175,7 +185,7 @@ class ProcurementRepository extends Repository
 
                 ProductHistory::create([
                     'quantity' => $item->quantity,
-                    'price' => $item->sub_total,
+                    'price' => $item->unit_price,
                     'type' => 1, // procurement,
                     'bakehouse_id' => $bakehouse_id,
                     'product_id' => $item->product_id,

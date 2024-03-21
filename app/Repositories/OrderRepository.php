@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\OrderDetails;
 use App\Models\StockProduct;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Repositories\Repository;
 use Illuminate\Support\Facades\Auth;
@@ -57,9 +58,22 @@ class OrderRepository extends Repository
                         'quantity' => 0
                     ]);
                 }
-
             }
 
+        }
+
+        if($request->input('status') == 1){
+            Transaction::create([
+                "reference" => $this->referenceGenerator('Transaction'),
+                "bakehouse_id" =>  $bakehouse_id,
+                "customer_id" => $request->input('customer_id'),
+                "total_amount" => $request->input('amount_versement'),
+                "type_payment" => 0,
+                "note" => "Commande versement",
+                "add_date" => Carbon::now(),
+                "added_by" =>  Auth::user()->id,
+                "add_ip" => $this->getIp()
+            ]);
         }
 
 
@@ -153,6 +167,19 @@ class OrderRepository extends Repository
                 ]);
             }
         }
+
+
+        Transaction::create([
+            "reference" => $this->referenceGenerator('Transaction'),
+            "bakehouse_id" =>  $bakehouse_id,
+            "customer_id" => $order->customer_id,
+            "total_amount" => $order->total_amount,
+            "type_payment" => 0,
+            "note" => "Commande versement",
+            "add_date" => Carbon::now(),
+            "added_by" =>  Auth::user()->id,
+            "add_ip" => $this->getIp()
+        ]);
 
 
 

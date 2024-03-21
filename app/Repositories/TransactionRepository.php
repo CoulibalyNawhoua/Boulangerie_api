@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Customer;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Repositories\Repository;
@@ -41,6 +42,25 @@ class TransactionRepository extends Repository
         return $versement;
     }
 
+    public function list_versement_customers(){
+        $bakehouse_id = (Auth::user()->bakehouse)? Auth::user()->bakehouse->id : NULL ;
+
+        $versement = Customer::where('customers.bakehouse_id', $bakehouse_id)
+                            ->withSum([
+                                'orders' => function ($query) {
+                                    $query->where('status', 1)
+                                        ->select(DB::raw('SUM(total_amount)'));
+                                },
+                                'transactions' => function ($query) {
+                                    $query->select(DB::raw('SUM(total_amount)'));
+                                }
+                            ], 'total_amount')
+
+                    ->get();
+
+        return $versement;
+    }
+
     public function view_versement_delivery($id){
         $bakehouse_id = (Auth::user()->bakehouse)? Auth::user()->bakehouse->id : NULL ;
 
@@ -66,6 +86,26 @@ class TransactionRepository extends Repository
         return $versement;
     }
 
+    public function views_versement_customers($id){
+        $bakehouse_id = (Auth::user()->bakehouse)? Auth::user()->bakehouse->id : NULL ;
+
+        $versement = Customer::where('customers.bakehouse_id', $bakehouse_id)
+                            ->where('id',$id)
+                            ->withSum([
+                                'orders' => function ($query) {
+                                    $query->where('status', 1)
+                                        ->select(DB::raw('SUM(total_amount)'));
+                                },
+                                'transactions' => function ($query) {
+                                    $query->select(DB::raw('SUM(total_amount)'));
+                                }
+                            ], 'total_amount')
+
+                    ->first();
+
+        return $versement;
+    }
+
     public function storeTransaction(Request $request){
 
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
@@ -76,7 +116,7 @@ class TransactionRepository extends Repository
         $data["total_amount"] = $request->input('total_amount');
         $data["type_payment"] = $request->input('type_payment');
         $data["note"] = $request->input('note');
-        $saledata["add_date"] = Carbon::now();
+        $data["add_date"] = Carbon::now();
         $data["added_by"] = Auth::user()->id;
         $data["add_ip"] = $this->getIp();
 

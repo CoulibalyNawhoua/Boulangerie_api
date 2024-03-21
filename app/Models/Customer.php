@@ -38,4 +38,17 @@ class Customer extends Model
         'delete_ip',
         'uuid'
     ];
+
+
+    public function bakehouse()
+    {
+        return $this->belongsTo(Bakehouse::class, 'bakehouse_id', 'id');
+    }
+    public function transactions(){
+        return $this->hasMany(Transaction::class, 'customer_id', 'id');
+    }
+
+    public function orders(){
+        return $this->hasMany(Order::class, 'customer_id', 'id');
+    }
 }
