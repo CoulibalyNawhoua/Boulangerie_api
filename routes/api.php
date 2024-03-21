@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\ProductStockController;
 use App\Http\Controllers\Api\TechnicalSheetController;
 use App\Http\Controllers\Api\ExpenseCategoryController;
 use App\Http\Controllers\Api\ProductionHistoryController;
+use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
 
 /*
@@ -97,7 +98,12 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::delete('/sale-delete/{id}', [SaleController::class, 'saleDestroy']);
     Route::get('/sale-sum-today', [SaleController::class, 'saleSum']);
 
+    Route::get('/transactions/versement-deliveries', [TransactionController::class, 'versement_delivery']);
+    Route::get('/transactions/versement-view-delivries/{id}', [TransactionController::class, 'versement_delivery_view']);
 
+    Route::get('/transactions/deliveries/{id}', [TransactionController::class, 'DeliveryView']);
+    Route::get('/transactions/customers/{id}', [TransactionController::class, 'CustomersView']);
+    Route::post('transaction-store', [TransactionController::class, 'storeTransacts']);
     ///api mobile
     Route::get('/deliveries-by-date', [DeliveryController::class, 'delivery_by_date']);
 

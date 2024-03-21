@@ -27,9 +27,11 @@ class TransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeTransacts(Request $request)
     {
-        //
+        $resp = $this->transactionRepository->storeTransaction($request);
+
+        return response()->json(['data' => $resp]);
     }
 
     /**
@@ -54,5 +56,33 @@ class TransactionController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function versement_delivery()
+    {
+        $resp = $this->transactionRepository->list_versement_delivery();
+
+        return response()->json(['data'=>$resp]);
+    }
+
+    public function versement_delivery_view($id)
+    {
+        $resp = $this->transactionRepository->view_versement_delivery($id);
+
+        return response()->json(['data'=>$resp]);
+    }
+
+    public function DeliveryView(string $id)
+    {
+        $resp = $this->transactionRepository->transactionDeliveryView($id);
+
+        return response()->json(['data' => $resp]);
+    }
+
+    public function CustomersView(string $id)
+    {
+        $resp = $this->transactionRepository->transactionCustomerView($id);
+
+        return response()->json(['data' => $resp]);
     }
 }

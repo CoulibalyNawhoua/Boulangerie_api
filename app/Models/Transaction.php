@@ -38,6 +38,22 @@ class Transaction extends Model
         'is_deleted',
         'delete_ip',
         'delete_date',
+        'type_payment'
 
     ];
+
+    public function reception()
+    {
+        return $this->belongsTo(User::class, 'added_by', 'id');
+    }
+
+    public function livreur()
+    {
+        return $this->belongsTo(User::class, 'delivery_person_id', 'id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
 }

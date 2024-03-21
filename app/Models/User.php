@@ -71,4 +71,15 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(Bakehouse::class, 'bakehouse_id', 'id');
     }
+    public function livraisons(){
+        return $this->hasMany(Delivery::class, 'delivery_person_id', 'id');
+    }
+
+    public function retours(){
+        return $this->hasMany(OrderReturn::class, 'delivery_person_id', 'id');
+    }
+
+    public function transactions(){
+        return $this->hasMany(Transaction::class, 'delivery_person_id', 'id');
+    }
 }
