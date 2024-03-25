@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Customer;
+use App\Models\Delivery;
+use App\Models\OrderReturn;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Repositories\Repository;
@@ -156,5 +158,23 @@ class TransactionRepository extends Repository
                                 ->get();
 
         return $query;
+    }
+
+    public function reliquat_versement_delivery(){
+
+        $orderReturnTotal = OrderReturn::where('delivery_person_id',Auth::user()->id)
+                                ->sum('total_amount');
+
+        $saleDeliveryTotal = Delivery::where('delivery_person_id',Auth::user()->id)
+                                            ->where('status',1)
+                                            ->where('is_deleted',0)
+                                            ->sum('total_amount');
+
+        $trasactionTotal = Transaction::where('delivery_person_id',Auth::user()->id)
+                                            ->sum('total_amount');
+
+        $dette = ($saleDeliveryTotal - $orderReturnTotal) - $trasactionTotal;
+
+        return $dette;
     }
 }

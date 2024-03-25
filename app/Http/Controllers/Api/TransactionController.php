@@ -107,4 +107,11 @@ class TransactionController extends Controller
         return response()->json(['data'=>$resp]);
     }
 
+    public function reliquat_by_livreurs()
+    {
+        $resp = $this->transactionRepository->reliquat_versement_delivery();
+
+        return response()->json(['data'=>$resp]);
+    }
+
 }
