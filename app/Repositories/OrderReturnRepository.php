@@ -44,7 +44,7 @@ class OrderReturnRepository extends Repository
         $returndata["added_by"] = Auth::user()->id;
         $returndata["add_ip"] = $this->getIp();
 
-        // dd($returndata);
+        // dd($returnItems);
         $return = OrderReturn::create($returndata);
 
         foreach (json_decode($returnItems) as $item) {

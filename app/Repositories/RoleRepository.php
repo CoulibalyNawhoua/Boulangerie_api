@@ -23,7 +23,7 @@ class RoleRepository extends Repository
             'name'=>$request->name
         ]);
 
-        $role->syncPermissions($request->permissions);
+        $role->syncPermissions(explode(',',$request->permissions));
     }
 
 
@@ -33,7 +33,7 @@ class RoleRepository extends Repository
 
         $role->name = $request->name;
         $role->save();
-        $role->syncPermissions($request->permissions);
+        $role->syncPermissions(explode(',',$request->permissions));
 
         return $role;
 

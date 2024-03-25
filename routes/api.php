@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\OrderReturnController;
 use App\Http\Controllers\Api\ProcurementController;
 use App\Http\Controllers\Api\SousFamilleController;
 use App\Http\Controllers\Api\Auth\WebAuthController;
+use App\Http\Controllers\Api\BakehouseController;
 use App\Http\Controllers\Api\ProductStockController;
 use App\Http\Controllers\Api\TechnicalSheetController;
 use App\Http\Controllers\Api\ExpenseCategoryController;
@@ -106,6 +107,10 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::get('/transactions/deliveries/{id}', [TransactionController::class, 'DeliveryView']);
     Route::get('/transactions/customers/{id}', [TransactionController::class, 'CustomersView']);
     Route::post('transaction-store', [TransactionController::class, 'storeTransacts']);
+
+
+    Route::get('/bakehouses/dashbord', [BakehouseController::class, 'dashboardIndex']);
+
     ///api mobile
     Route::get('/deliveries-by-date', [DeliveryController::class, 'delivery_by_date']);
 
