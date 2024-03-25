@@ -171,6 +171,7 @@ class TransactionRepository extends Repository
                                             ->sum('total_amount');
 
         $trasactionTotal = Transaction::where('delivery_person_id',Auth::user()->id)
+                                            ->where('status_paiement',1)
                                             ->sum('total_amount');
 
         $dette = ($saleDeliveryTotal - $orderReturnTotal) - $trasactionTotal;
