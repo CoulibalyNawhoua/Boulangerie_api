@@ -104,6 +104,7 @@ class SaleRepository extends Repository
             "total_amount" => $request->input('total_amount'),
             "type_payment" => 0,
             "note" => "vente caisse",
+            "status_paiement" => 1,
             "add_date" => Carbon::now(),
             "added_by" =>  Auth::user()->id,
             "add_ip" => $this->getIp()

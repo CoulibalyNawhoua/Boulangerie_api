@@ -170,4 +170,18 @@ class DeliveryRepository extends Repository
             return $query;
         }
 
+        public function delivery_by_livreur() {
+
+
+            $query = DeliveryDetails::selectRaw('delivery_details.quantity, products.name, products.image, delivery_details.created_at')
+                                    ->leftJoin('deliveries', 'deliveries.id', '=', 'delivery_details.delivery_id')
+                                    ->leftJoin('products', 'products.id', '=', 'delivery_details.product_id')
+                                    ->where('deliveries.delivery_person_id', Auth::user()->id)
+                                    ->where('deliveries.status',1)
+                                    ->orderByDesc('delivery_details.created_at')
+                                    ->get();
+
+            return $query;
+        }
+
 }

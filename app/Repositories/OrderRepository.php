@@ -70,6 +70,7 @@ class OrderRepository extends Repository
                 "total_amount" => $request->input('amount_versement'),
                 "type_payment" => 0,
                 "note" => "Commande versement",
+                "status_paiement" => 1,
                 "add_date" => Carbon::now(),
                 "added_by" =>  Auth::user()->id,
                 "add_ip" => $this->getIp()
@@ -176,6 +177,7 @@ class OrderRepository extends Repository
             "total_amount" => $order->total_amount,
             "type_payment" => 0,
             "note" => "Commande versement",
+            "status_paiement" => 1,
             "add_date" => Carbon::now(),
             "added_by" =>  Auth::user()->id,
             "add_ip" => $this->getIp()

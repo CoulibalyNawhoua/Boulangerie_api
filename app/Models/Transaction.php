@@ -38,7 +38,8 @@ class Transaction extends Model
         'is_deleted',
         'delete_ip',
         'delete_date',
-        'type_payment'
+        'type_payment',
+        'status_paiement'
 
     ];
 

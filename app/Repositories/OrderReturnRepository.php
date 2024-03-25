@@ -129,4 +129,17 @@ class OrderReturnRepository extends Repository
 
         return $return;
     }
+
+    public function order_return_by_livreur() {
+
+
+        $query = OrderReturnDetail::selectRaw('order_return_details.quantity, products.name, products.image, order_return_details.created_at')
+                                ->leftJoin('order_returns', 'order_returns.id', '=', 'order_return_details.order_return_id')
+                                ->leftJoin('products', 'products.id', '=', 'order_return_details.product_id')
+                                ->where('order_returns.delivery_person_id', Auth::user()->id)
+                                ->orderByDesc('order_return_details.created_at')
+                                ->get();
+
+        return $query;
+    }
 }

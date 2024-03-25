@@ -116,6 +116,7 @@ class TransactionRepository extends Repository
         $data["total_amount"] = $request->input('total_amount');
         $data["type_payment"] = $request->input('type_payment');
         $data["note"] = $request->input('note');
+        $data["status_paiement"] = 1;
         $data["add_date"] = Carbon::now();
         $data["added_by"] = Auth::user()->id;
         $data["add_ip"] = $this->getIp();
@@ -143,5 +144,17 @@ class TransactionRepository extends Repository
         return Transaction::where('transactions.customer_id', $id)
                             ->where('transactions.bakehouse_id', $bakehouse_id)
                             ->with(['reception','customer'])->get();
+    }
+
+    public function transaction_by_livreur() {
+
+
+        $query = Transaction::selectRaw('total_amount,created_at')
+                                ->where('delivery_person_id', Auth::user()->id)
+                                ->where('status_paiement', 1)
+                                ->orderByDesc('created_at')
+                                ->get();
+
+        return $query;
     }
 }
