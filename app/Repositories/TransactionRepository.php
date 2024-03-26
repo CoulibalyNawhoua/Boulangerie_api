@@ -186,7 +186,8 @@ class TransactionRepository extends Repository
                                 ->where('delivery_person_id', Auth::user()->id)
                                 ->where('status_paiement', 1)
                                 ->orderByDesc('created_at')
-                                ->limit(15);
+                                ->limit(15)
+                                ->get();
 
         return $query;
 
