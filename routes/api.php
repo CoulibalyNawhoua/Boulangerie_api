@@ -17,10 +17,12 @@ use App\Http\Controllers\Api\OrderReturnController;
 use App\Http\Controllers\Api\ProcurementController;
 use App\Http\Controllers\Api\SousFamilleController;
 use App\Http\Controllers\Api\Auth\WebAuthController;
+use App\Http\Controllers\Api\BakehouseController;
 use App\Http\Controllers\Api\ProductStockController;
 use App\Http\Controllers\Api\TechnicalSheetController;
 use App\Http\Controllers\Api\ExpenseCategoryController;
 use App\Http\Controllers\Api\ProductionHistoryController;
+use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
 
 /*
@@ -95,10 +97,26 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::post('sale-store', [SaleController::class, 'saleStore']);
     Route::get('/sale/view/{uuid}', [SaleController::class, 'saleView']);
     Route::delete('/sale-delete/{id}', [SaleController::class, 'saleDestroy']);
+    Route::get('/sale-sum-today', [SaleController::class, 'saleSum']);
 
+    Route::get('/transactions/versement-deliveries', [TransactionController::class, 'versement_delivery']);
+    Route::get('/transactions/versement-customers', [TransactionController::class, 'versement_customers']);
+    Route::get('/transactions/versement-view-delivries/{id}', [TransactionController::class, 'versement_delivery_view']);
+    Route::get('/transactions/versement-view-customers/{id}', [TransactionController::class, 'versement_customers_view']);
+
+    Route::get('/transactions/deliveries/{id}', [TransactionController::class, 'DeliveryView']);
+    Route::get('/transactions/customers/{id}', [TransactionController::class, 'CustomersView']);
+    Route::post('transaction-store', [TransactionController::class, 'storeTransacts']);
+
+
+    Route::get('/bakehouses/dashbord', [BakehouseController::class, 'dashboardIndex']);
 
     ///api mobile
     Route::get('/deliveries-by-date', [DeliveryController::class, 'delivery_by_date']);
+    Route::get('/deliveries-by-livreurs', [DeliveryController::class, 'delivery_by_livreurs']);
+    Route::get('/order-return-by-livreurs', [OrderReturnController::class, 'order_return_by_livreurs']);
+    Route::get('/transactions-by-livreurs', [TransactionController::class, 'transaction_by_livreurs']);
+    Route::get('/reliquat-versements-by-livreurs', [TransactionController::class, 'reliquat_by_livreurs']);
 
 
 });

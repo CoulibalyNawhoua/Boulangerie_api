@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Http\Requests\StoreRoleRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -23,7 +24,7 @@ class RoleRepository extends Repository
             'name'=>$request->name
         ]);
 
-        $role->syncPermissions($request->permissions);
+        $role->syncPermissions(explode(',',$request->permissions));
     }
 
 
@@ -33,7 +34,7 @@ class RoleRepository extends Repository
 
         $role->name = $request->name;
         $role->save();
-        $role->syncPermissions($request->permissions);
+        $role->syncPermissions(explode(',',$request->permissions));
 
         return $role;
 
@@ -43,18 +44,18 @@ class RoleRepository extends Repository
     public function role_view($id)
     {
 
-        $role = $this->model->find($id);
+        $role = Role::findById($id);
 
-        $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
-            ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
-            ->all();
+        if (!$role) {
+            return response()->json(['error' => 'Role introuvable'], 404);
+        }
+
+        $rolePermissions = $role->permissions->pluck('name');
 
         $data['role'] = $role;
-
         $data['rolePermission'] = $rolePermissions;
 
         return $data;
-        return $this->model->find($id);
     }
 
 

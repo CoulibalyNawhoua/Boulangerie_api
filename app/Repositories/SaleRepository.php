@@ -7,6 +7,7 @@ use App\Models\Sale;
 use App\Models\SaleDetails;
 use App\Models\StockProduct;
 use App\Models\StockProduction;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Repositories\Repository;
 use Carbon\Carbon;
@@ -94,7 +95,20 @@ class SaleRepository extends Repository
                 'added_by' => Auth::user()->id,
                 'add_ip' => $this->getIp(),
             ]);
+
+
         }
+        Transaction::create([
+            "reference" => $this->referenceGenerator('Transaction'),
+            "bakehouse_id" =>  $bakehouse_id,
+            "total_amount" => $request->input('total_amount'),
+            "type_payment" => 0,
+            "note" => "vente caisse",
+            "status_paiement" => 1,
+            "add_date" => Carbon::now(),
+            "added_by" =>  Auth::user()->id,
+            "add_ip" => $this->getIp()
+        ]);
 
         return $sale;
     }
@@ -108,4 +122,16 @@ class SaleRepository extends Repository
                 ->with(['auteur','sale_details.product'])
                 ->first();
     }
+
+    public function saleUserToday()  {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        return Sale::where('bakehouse_id', $bakehouse_id)
+                ->where('added_by', Auth::user()->id)
+                ->whereDate('created_at', Carbon::now())
+                ->sum('total_amount');
+    }
+
+
 }

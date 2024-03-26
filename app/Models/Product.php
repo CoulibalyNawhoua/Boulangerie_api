@@ -55,4 +55,10 @@ class Product extends Model
     {
         return $this->belongsTo(User::class,'added_by','id');
     }
+
+    public function procurement_details()
+    {
+        return $this->hasMany(ProcurementDetails::class, 'product_id', 'id');
+    }
+
 }

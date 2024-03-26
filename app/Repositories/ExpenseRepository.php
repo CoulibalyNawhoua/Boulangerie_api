@@ -20,7 +20,8 @@ class ExpenseRepository extends Repository
         return Expense::where('expenses.is_deleted',0)
                             ->where('expenses.bakehouse_id', $bakehouse_id)
                             ->leftJoin('users','users.id','=','expenses.added_by')
-                            ->selectRaw('expenses.*, CONCAT(users.first_name," ",users.last_name) as auteur')->get();
+                            ->leftJoin('expense_categories','expense_categories.id','=','expenses.expense_category_id')
+                            ->selectRaw('expenses.id,expenses.libelle,expenses.total_amount,expenses.comment,expense_categories.name, CONCAT(users.first_name," ",users.last_name) as auteur')->get();
 
     }
 }
