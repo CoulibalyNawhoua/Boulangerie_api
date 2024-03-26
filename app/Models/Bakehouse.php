@@ -29,6 +29,8 @@ class Bakehouse extends Model
         'delete_date',
         'address',
         'phone',
+        'responsable',
+        'nb_delivery_person',
         'uuid'
     ];
 

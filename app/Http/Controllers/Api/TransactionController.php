@@ -114,4 +114,11 @@ class TransactionController extends Controller
         return response()->json(['data'=>$resp]);
     }
 
+    public function transaction_by_livreurs_recent()
+    {
+        $resp = $this->transactionRepository->transaction_by_livreur_recent();
+
+        return response()->json(['data'=>$resp]);
+    }
+
 }

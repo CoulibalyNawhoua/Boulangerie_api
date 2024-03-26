@@ -178,4 +178,17 @@ class TransactionRepository extends Repository
 
         return $dette;
     }
+
+
+    public function transaction_by_livreur_recent() {
+
+        $query = Transaction::selectRaw('total_amount,created_at')
+                                ->where('delivery_person_id', Auth::user()->id)
+                                ->where('status_paiement', 1)
+                                ->orderByDesc('created_at')
+                                ->limit(15);
+
+        return $query;
+
+    }
 }
