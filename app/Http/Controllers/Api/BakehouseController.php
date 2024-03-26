@@ -19,15 +19,23 @@ class BakehouseController extends Controller
      */
     public function index()
     {
-        //
+        $resp = $this->bakehouseRepository->all();
+
+        return response()->json(['data'=> $resp]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required',
+        ]);
+
+        $resp = $this->bakehouseRepository->create($request->all());
+
+        return response()->json(['data'=>$resp]);
     }
 
     /**
@@ -41,9 +49,11 @@ class BakehouseController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $uuid)
     {
-        //
+        $resp = $this->bakehouseRepository->findByUuid($uuid);
+
+        return response()->json(['data' => $resp]);
     }
 
     /**
@@ -59,7 +69,13 @@ class BakehouseController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required',
+        ]);
+
+        $resp = $this->bakehouseRepository->update($request->all(), $id);
+
+        return response()->json(['data'=>$resp]);
     }
 
     /**
