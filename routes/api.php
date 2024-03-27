@@ -40,6 +40,8 @@ Route::group(['middleware'=>'jwt.auth'],function(){
 
 
     Route::get('/select-delivery-person-bakehouse', [UserController::class, 'select_delivery_person_bakehouse']);
+    Route::get('/select-users-abonnes', [UserController::class, 'select_abonnes']);
+    Route::post('/store-users-delivery', [UserController::class, 'store_select_delivery']);
 
     Route::apiResource('products', ProductController::class);
     Route::post('/products-update/{uuid}', [ProductController::class,'update']);
@@ -112,6 +114,10 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::get('/bakehouses/dashbord', [BakehouseController::class, 'dashboardIndex']);
     Route::apiResource('bakehouses', BakehouseController::class);
 
+    Route::apiResource('users', UserController::class);
+
+
+
     ///api mobile
     Route::get('/deliveries-by-date', [DeliveryController::class, 'delivery_by_date']);
     Route::get('/deliveries-by-livreurs', [DeliveryController::class, 'delivery_by_livreurs']);
@@ -119,6 +125,7 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::get('/transactions-by-livreurs', [TransactionController::class, 'transaction_by_livreurs']);
     Route::get('/transactions-livreurs-recent', [TransactionController::class, 'transaction_by_livreurs_recent']);
     Route::get('/reliquat-versements-by-livreurs', [TransactionController::class, 'reliquat_by_livreurs']);
+    Route::post('create-transaction-mobile', [TransactionController::class, 'create_transaction_mobile_api']);
 
 
 });

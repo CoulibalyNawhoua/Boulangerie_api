@@ -29,13 +29,7 @@ class BakehouseController extends Controller
      */
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required',
-        ]);
-
-        $resp = $this->bakehouseRepository->create($request->all());
-
-        return response()->json(['data'=>$resp]);
+        //
     }
 
     /**
@@ -43,7 +37,13 @@ class BakehouseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required',
+        ]);
+
+        $resp = $this->bakehouseRepository->create($request->all());
+
+        return response()->json(['data'=>$resp]);
     }
 
     /**
