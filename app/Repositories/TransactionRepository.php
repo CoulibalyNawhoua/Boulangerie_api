@@ -242,5 +242,4 @@ class TransactionRepository extends Repository
         }
     }
 
-    public
 }
