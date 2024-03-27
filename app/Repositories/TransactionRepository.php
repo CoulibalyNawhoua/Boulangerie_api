@@ -244,4 +244,18 @@ class TransactionRepository extends Repository
         }
     }
 
+
+    public function update_transaction_mobile(Request $request){
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+        $transaction_id = $request->input('transaction_id');
+
+        $transaction = Transaction::where('reference',$transaction_id)->first();
+        $param['status_paiement'] = 1;
+        $param["edited_by"] = Auth::user()->id;
+        $param["edit_ip"] = $this->getIp();
+        $param["edit_date"] = Carbon::now();
+
+        return $transaction->update($param);
+    }
+
 }
