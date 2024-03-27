@@ -27,39 +27,40 @@ class UserRepository extends Repository
 
     public function storeUser(Request $request)
     {
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
 
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-        $input['email'] = $input['email'];
-        $input['user_name'] = $input['user_name'];
-        $input['added_by'] = Auth::user()->id;
-        $input['add_ip'] = $this->getIp();
-        $input['add_date'] = Carbon::now();
+        $userDeliveryCount = User::where('bakehouse_id', $bakehouse_id)
+             ->whereHas('roles', function($q)
+             {
+                 $q->where([
+                     ['name','=','livreur']
+                 ]);
+             })
+             ->count();
 
-        $user = User::create($input);
-        $user->assignRole($request->input('roles'));
+        if(Auth::user()->bakehouse->nb_delivery_person > $userDeliveryCount){
+            $input = $request->all();
+            $input['password'] = Hash::make($input['password']);
+            $input['email'] = $input['email'];
+            $input['phone'] = $input['phone'];
+            $input['first_name'] = $input['first_name'];
+            $input['last_name'] = $input['last_name'];
+            $input['bakehouse_id'] = $bakehouse_id;
+            $input['added_by'] = Auth::user()->id;
+            $input['add_ip'] = $this->getIp();
+            $input['add_date'] = Carbon::now();
 
-        // $info = UserInfo::where('user_id', $user->id)->first();
+            $user = User::create($input);
+            $user->assignRole("livreur");
+        }else{
+            return $data = [
+                "code"=>"422",
+                "msg" => "Vous n'êtes pas autorisé à créer plus de ".$userDeliveryCount." livreurs"
+            ];
+        }
 
-        // if ($info === null) {
-        //     $info = new UserInfo();
-        // }
 
-        // // attach this info to the current user
-        // $info->user()->associate(auth()->user());
 
-        // foreach ($request->only(array_keys($request->rules())) as $key => $value) {
-        //     if (is_array($value)) {
-        //         $value = serialize($value);
-        //     }
-        //     $info->$key = $value;
-        // }
-
-        // if ($request->depot_id) {
-        //     $info->entites_id = $request->depot_id;
-        // }
-
-        // $info->save();
     }
 
     public function storeAborne(Request $request)
@@ -68,8 +69,11 @@ class UserRepository extends Repository
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
         $input['email'] = $input['email'];
+        $input['phone'] = $input['phone'];
+        $input['first_name'] = $input['first_name'];
+        $input['last_name'] = $input['last_name'];
         $input['bakehouse_id'] = $input['bakehouse_id'];
-        $input['user_name'] = $input['user_name'];
+        // $input['username'] = $input['user_name'];
         $input['added_by'] = Auth::user()->id;
         $input['add_ip'] = $this->getIp();
         $input['add_date'] = Carbon::now();
@@ -214,6 +218,14 @@ class UserRepository extends Repository
 
         return $user->user_name;
     }
+
+    public function listUsers()
+    {
+        return User::leftJoin('bakehouses','bakehouses.id','=','users.bakehouse_id')
+                    ->selectRaw('users.id,bakehouses.name,users.email,users.phone,bakehouses.name,users.active, CONCAT(users.first_name," ",users.last_name) as complet_name')
+                    ->get();
+    }
+
 
     // public function updateUserEntrepot(Request $request,$id)
     // {

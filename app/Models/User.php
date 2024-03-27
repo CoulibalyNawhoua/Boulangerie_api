@@ -27,10 +27,11 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'username',
         'email',
-        'full_name',
+        'last_name',
         'first_name',
         'password',
         'bakehouse_id',
+        'phone',
         'active',
         'uuid'
     ];

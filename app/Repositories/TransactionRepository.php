@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class TransactionRepository extends Repository
 {
@@ -191,5 +192,53 @@ class TransactionRepository extends Repository
 
         return $query;
 
+    }
+
+    public function create_transaction_mobile(Request $request){
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+        $user = Auth::user();
+
+        $data["reference"] = $this->referenceGenerator('Transaction');
+        $data["bakehouse_id"] = $bakehouse_id;
+        $data["delivery_person_id"]= $user->id;
+        $data["total_amount"] = $request->input('total_amount');
+        $data["type_payment"] = 1;
+        $data["note"] = "Paiement via imoney";
+        $data["status_paiement"] = 0;
+        $data["add_date"] = Carbon::now();
+        $data["added_by"] = Auth::user()->id;
+        $data["add_ip"] = $this->getIp();
+
+        $transaction = Transaction::create($data);
+
+        $donnees = [
+                'apiKey' => '262425053964adkcz02q1x.7323710',
+                'site_id' => "6076583",
+                'transaction_id' => $transaction->reference,
+                'amount' => $request->total_amount,
+                'description' => "TID: ".$transaction->reference." paiement de la BG: ".Auth::user()->bakehouse->name."",
+                'customer_id'=>Auth::user()->id,
+                'customer_name'=>Auth::user()->first_name,
+                'customer_surname'=>Auth::user()->last_name,
+                'customer_phone_number'=>Auth::user()->phone,
+                "distri_seller_name" => Auth::user()->first_name." ".Auth::user()->last_name,
+                "distri_seller_id" => Auth::user()->id,
+                "plateforme_name" => "Boulangerie-App",
+
+            ];
+
+        $response = Http::post('https://distripay-sanbox-api.distriforce.shop',$donnees);
+        $contenu =  $response->json();
+
+        if($contenu['code'] == '201'){
+
+            return response()->json([
+                    "payment_url"=>$contenu["data"]["payment_url"],
+                    "transaction_id" => $transaction->reference
+                ]);
+
+        }else{
+           return $contenu;
+        }
     }
 }
