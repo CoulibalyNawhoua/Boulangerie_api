@@ -227,7 +227,7 @@ class TransactionRepository extends Repository
 
             ];
 
-        $response = Http::post('https://distripay-sanbox-api.distriforce.shop',$donnees);
+        $response = Http::post('https://distripay-sanbox-api.distriforce.shop/distriforce-check/payment',$donnees);
         $contenu =  $response->json();
 
         if($contenu['code'] == '201'){
@@ -241,4 +241,6 @@ class TransactionRepository extends Repository
            return $contenu;
         }
     }
+
+    public
 }
