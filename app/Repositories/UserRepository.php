@@ -222,8 +222,51 @@ class UserRepository extends Repository
     public function listUsers()
     {
         return User::leftJoin('bakehouses','bakehouses.id','=','users.bakehouse_id')
-                    ->selectRaw('users.id,bakehouses.name,users.email,users.phone,bakehouses.name,users.active, CONCAT(users.first_name," ",users.last_name) as complet_name')
+                    ->selectRaw('users.id,users.first_name,bakehouses.name,users.email,users.phone,bakehouses.name,users.active, CONCAT(users.first_name," ",users.last_name) as complet_name')
                     ->get();
+    }
+
+    public function updateAbonne(Request $request, $id)
+    {
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        $input = $request->all();
+        $input['email'] = $input['email'];
+        $input['phone'] = $input['phone'];
+        $input['first_name'] = $input['first_name'];
+        $input['last_name'] = $input['last_name'];
+        // $input['username'] = $input['user_name'];
+        $input["edited_by"] = Auth::user()->id;
+        $input["edit_ip"] = $this->getIp();
+        $input["edit_date"] = Carbon::now();
+
+        $user = $this->model->find($id);
+
+        if(!empty($input['roles'])){
+            // dd($input['roles']);
+            $input['bakehouse_id'] = $input['bakehouse_id'];
+            DB::table('model_has_roles')->where('model_id',$id)->delete();
+            $user->assignRole($input['roles']);
+        }
+
+
+        return $user->update($input);;
+    }
+
+    public function desactivateUser($id){
+        $user = $this->model->find($id);
+
+        if($user->active == 1){
+            $user->update([
+                'active'=>0,
+            ]);
+        }else{
+            $user->update([
+                'active'=>1,
+            ]);
+        }
+
+        return $user;
     }
 
 

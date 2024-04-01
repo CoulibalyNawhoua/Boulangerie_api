@@ -38,7 +38,9 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $resp = $this->userRepository->usersAccount($id);
+
+        return response()->json(['data'=> $resp ]);
     }
 
     /**
@@ -46,7 +48,9 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $resp = $this->userRepository->updateAbonne($request, $id);
+
+        return response()->json(['data'=> $resp ]);
     }
 
     /**
@@ -74,6 +78,13 @@ class UserController extends Controller
     public function store_select_delivery(Request $request) {
 
         $resp = $this->userRepository->storeUser($request);
+
+        return response()->json(['data'=>$resp]);
+    }
+
+    public function activate_or_desactivate_user($id) {
+
+        $resp = $this->userRepository->desactivateUser($id);
 
         return response()->json(['data'=>$resp]);
     }

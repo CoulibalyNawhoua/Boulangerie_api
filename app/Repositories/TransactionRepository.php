@@ -34,7 +34,8 @@ class TransactionRepository extends Repository
                                         ->select(DB::raw('SUM(total_amount)'));
                                 },
                                 'transactions' => function ($query) {
-                                    $query->select(DB::raw('SUM(total_amount)'));
+                                    $query->where('status_paiement', 1)
+                                    ->select(DB::raw('SUM(total_amount)'));
                                 }
                             ], 'total_amount')
                             ->whereHas('roles', function ($query) {
@@ -55,7 +56,8 @@ class TransactionRepository extends Repository
                                         ->select(DB::raw('SUM(total_amount)'));
                                 },
                                 'transactions' => function ($query) {
-                                    $query->select(DB::raw('SUM(total_amount)'));
+                                    $query->where('status_paiement', 1)
+                                    ->select(DB::raw('SUM(total_amount)'));
                                 }
                             ], 'total_amount')
 
@@ -78,7 +80,8 @@ class TransactionRepository extends Repository
                                         ->select(DB::raw('SUM(total_amount)'));
                                 },
                                 'transactions' => function ($query) {
-                                    $query->select(DB::raw('SUM(total_amount)'));
+                                    $query->where('status_paiement', 1)
+                                                ->select(DB::raw('SUM(total_amount)'));
                                 }
                             ], 'total_amount')
                             ->whereHas('roles', function ($query) {
@@ -100,7 +103,8 @@ class TransactionRepository extends Repository
                                         ->select(DB::raw('SUM(total_amount)'));
                                 },
                                 'transactions' => function ($query) {
-                                    $query->select(DB::raw('SUM(total_amount)'));
+                                    $query->where('status_paiement', 1)
+                                    ->select(DB::raw('SUM(total_amount)'));
                                 }
                             ], 'total_amount')
 
@@ -136,6 +140,7 @@ class TransactionRepository extends Repository
 
         return Transaction::where('transactions.delivery_person_id', $id)
                             ->where('transactions.bakehouse_id', $bakehouse_id)
+                            ->where('status_paiement',1)
                             ->with(['reception','livreur'])->get();
     }
 
@@ -146,6 +151,7 @@ class TransactionRepository extends Repository
 
         return Transaction::where('transactions.customer_id', $id)
                             ->where('transactions.bakehouse_id', $bakehouse_id)
+                            ->where('status_paiement',1)
                             ->with(['reception','customer'])->get();
     }
 

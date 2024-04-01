@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Delivery;
 use App\Repositories\DeliveryRepository;
+use PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DeliveryController extends Controller
 {
@@ -79,5 +82,41 @@ class DeliveryController extends Controller
         $resp = $this->deliveryRepository->delivery_by_livreur();
 
         return response()->json(['data' => $resp]);
+    }
+
+    public function export_livraison_liste_pdf()
+    {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        $data = Delivery::where('bakehouse_id', $bakehouse_id)
+                            ->where('is_deleted', 0)
+                            ->with(['delivery_person'])
+                            ->get();
+
+        $pdf = PDF::loadView('pdf.livraisons',["items"=>$data]);
+        // dd($pdf);
+        $headers = [
+            'Content-Type' => 'application/pdf',
+        ];
+        return $pdf->download('livraison_liste.pdf',$headers);
+    }
+
+    public function export_delivery_pdf($uuid)
+    {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        $data = Delivery::where('uuid', $uuid)
+                            ->where('bakehouse_id', $bakehouse_id)
+                            ->with(['delivery_details.product','delivery_person'])
+                            ->first();
+
+        $pdf = PDF::loadView('pdf.livraison_detail',["items"=>$data]);
+        // dd($pdf);
+        $headers = [
+            'Content-Type' => 'application/pdf',
+        ];
+        return $pdf->download('livraisons_detail.pdf',$headers);
     }
 }

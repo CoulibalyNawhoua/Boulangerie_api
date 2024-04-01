@@ -19,7 +19,9 @@ class ProductRepository extends Repository
 
    public function productList() {
 
-        return Product::where('is_deleted', 0)->get();
+        return Product::where('is_deleted', 0)
+                        ->with('unit')
+                        ->get();
    }
 
    public function productStore(Request $request) {
@@ -112,7 +114,7 @@ class ProductRepository extends Repository
             'price' => $price,
             // 'cost' => $cost,
             // 'unit_id' => $unit_id,
-            'image' => $image_url,
+            'image' => $image_url == null ? $product->image : $image_url,
             // 'sous_famille_id' => $sous_famille_id,
             'added_by' => Auth::user()->id,
             // 'type' => $type,

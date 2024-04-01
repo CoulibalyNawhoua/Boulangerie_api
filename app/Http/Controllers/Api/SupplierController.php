@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Supplier;
 use App\Repositories\SupplierRepository;
+use PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SupplierController extends Controller
 {
@@ -90,5 +93,22 @@ class SupplierController extends Controller
         $resp = $this->supplierRepository->delete($id);
 
         return response()->json(['data'=>$resp]);
+    }
+
+    public function export_supplies_pdf(){
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        $data = Supplier::where('suppliers.is_deleted',0)
+                        ->where('suppliers.bakehouse_id', $bakehouse_id)
+                        ->leftJoin('users','users.id','=','suppliers.added_by')
+                        ->selectRaw('suppliers.*, CONCAT(users.first_name," ",users.last_name) as created_by')
+                        ->get();
+
+        $pdf = PDF::loadView('pdf.supplier',["items"=>$data]);
+        // dd($pdf);
+        $headers = [
+            'Content-Type' => 'application/pdf',
+         ];
+        return $pdf->download('fournisseurs.pdf',$headers);
     }
 }

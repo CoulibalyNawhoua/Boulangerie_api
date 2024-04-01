@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Procurement;
 use App\Repositories\ProcurementRepository;
+use PDF;
+use Illuminate\Support\Facades\Auth;
 
 class ProcurementController extends Controller
 {
@@ -69,5 +72,20 @@ class ProcurementController extends Controller
         $resp = $this->procurementRepository->delete($id);
 
         return response()->json(['data' => $resp]);
+    }
+
+    public function export_procurements_pdf(string $uuid){
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        $data = Procurement::where('procurements.uuid', $uuid)
+                            ->where('procurements.bakehouse_id', $bakehouse_id)
+                            ->with(['procurement_details.product','supplier'])->first();
+
+        $pdf = PDF::loadView('pdf.bondelivraison',["items"=>$data]);
+        // dd($pdf);
+        $headers = [
+            'Content-Type' => 'application/pdf',
+         ];
+        return $pdf->download('achats.pdf',$headers);
     }
 }
