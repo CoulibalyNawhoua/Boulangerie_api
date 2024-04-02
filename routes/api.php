@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\DeliveryController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\PermissionConroller;
 use App\Http\Controllers\Api\AjustementController;
+use App\Http\Controllers\Api\Auth\MobileAuthController;
 use App\Http\Controllers\Api\OrderReturnController;
 use App\Http\Controllers\Api\ProcurementController;
 use App\Http\Controllers\Api\SousFamilleController;
@@ -143,4 +144,5 @@ Route::group(['middleware'=>'jwt.auth'],function(){
 });
 
 Route::post('/signin', [WebAuthController::class, 'signin']);
+Route::post('/mob-signin', [MobileAuthController::class, 'mobile_login']);
 
