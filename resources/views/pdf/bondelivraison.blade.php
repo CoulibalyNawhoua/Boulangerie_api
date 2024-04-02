@@ -64,7 +64,7 @@
             <tr>
                 <td style="width:25%">
                     <div class="center">
-                    <img src="#" alt="LOGO ICI" style="text-align:center;">
+                    <img src="https://bdis.distriforce.app/assets/images/logo_distriforce.png" alt="" style="text-align:center;" width="50" height="50">
                     {{-- <div> <small class="ftsz_12"> Votre partenaire de vente de mèche humain </small> </div> --}}
                     </div>
                 </td>
@@ -82,7 +82,7 @@
             </tr>
         </tbody>
     </table>
-<hr style="margin-top:20px;"/>
+<hr />
     <table>
         <tbody>
             <tr>

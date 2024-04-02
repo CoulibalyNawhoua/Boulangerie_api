@@ -113,7 +113,7 @@ class ProductRepository extends Repository
             'stock_alert' => $stock_alert,
             'price' => $price,
             // 'cost' => $cost,
-            // 'unit_id' => $unit_id,
+            'unit_id' => $unit_id,
             'image' => $image_url == null ? $product->image : $image_url,
             // 'sous_famille_id' => $sous_famille_id,
             'added_by' => Auth::user()->id,
