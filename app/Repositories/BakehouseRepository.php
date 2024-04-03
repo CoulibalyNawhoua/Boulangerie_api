@@ -63,6 +63,7 @@ class BakehouseRepository extends Repository
                                 ->sum('total_amount');
 
         $trasactionTotal = Transaction::where('bakehouse_id',$bakehouse_id)
+                                            ->where('status_paiement', 1)
                                             ->sum('total_amount');
 
         $venteNette = ($saleDeliveryTotal - $orderReturnTotal) + $orderTotal + $salesCaisseTotal;
@@ -102,7 +103,8 @@ class BakehouseRepository extends Repository
                                 ->select(DB::raw('SUM(total_amount)'));
                         },
                         'transactions' => function ($query) {
-                            $query->select(DB::raw('SUM(total_amount)'));
+                            $query->where('status_paiement', 1)
+                            ->select(DB::raw('SUM(total_amount)'));
                         }
                     ], 'total_amount')
                     ->whereHas('roles', function ($query) {

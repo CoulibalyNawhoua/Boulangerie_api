@@ -15,7 +15,7 @@ class MobileAuthController extends Controller
     public function mobile_login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone_number' => 'required|string',
+            'phone' => 'required|string',
             'password' => 'required|string',
         ]);
 
@@ -23,7 +23,7 @@ class MobileAuthController extends Controller
             return response()->json(['error' => $validator->errors()], 401);
         }
 
-        if (! $token = JWTAuth::attempt(['phone_number' => $request->phone_number, 'password' => $request->password, 'active' => 1])) {
+        if (! $token = JWTAuth::attempt(['phone' => $request->phone_number, 'password' => $request->password, 'active' => 1])) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 

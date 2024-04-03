@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Repositories\OrderRepository;
+use PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -82,4 +85,41 @@ class OrderController extends Controller
 
         return response()->json(['data' => $resp]);
     }
+
+    public function export_commande_liste_pdf()
+    {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        $data = Order::where('bakehouse_id', $bakehouse_id)
+                        ->where('is_deleted', 0)
+                        ->with(['customer'])
+                        ->get();
+
+        $pdf = PDF::loadView('pdf.commande',["items"=>$data]);
+        // dd($pdf);
+        $headers = [
+            'Content-Type' => 'application/pdf',
+        ];
+        return $pdf->download('commandes.pdf',$headers);
+    }
+
+    public function export_orders_pdf($uuid)
+    {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        $data = Order::where('uuid', $uuid)
+                            ->where('bakehouse_id', $bakehouse_id)
+                            ->with(['order_details.product','customer'])
+                            ->first();
+
+        $pdf = PDF::loadView('pdf.commande_detail',["items"=>$data]);
+        // dd($pdf);
+        $headers = [
+            'Content-Type' => 'application/pdf',
+        ];
+        return $pdf->download('commandes_detail.pdf',$headers);
+    }
+
 }

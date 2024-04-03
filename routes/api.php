@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\DeliveryController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\PermissionConroller;
 use App\Http\Controllers\Api\AjustementController;
+use App\Http\Controllers\Api\Auth\MobileAuthController;
 use App\Http\Controllers\Api\OrderReturnController;
 use App\Http\Controllers\Api\ProcurementController;
 use App\Http\Controllers\Api\SousFamilleController;
@@ -115,6 +116,17 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::apiResource('bakehouses', BakehouseController::class);
 
     Route::apiResource('users', UserController::class);
+    Route::get('/activate-or-desactivate-user/{id}', [UserController::class, 'activate_or_desactivate_user']);
+    Route::get('/me', [WebAuthController::class, 'me']);
+
+    //PDF
+    Route::get('/export-supplier-pdf', [SupplierController::class, 'export_supplies_pdf']);
+    Route::get('/export-procurement-pdf/{uuid}', [ProcurementController::class, 'export_procurements_pdf']);
+    Route::get('/export-technical-pdf/{uuid}', [TechnicalSheetController::class, 'export_technicalsheet_pdf']);
+    Route::get('/export-commande-list-pdf', [OrderController::class, 'export_commande_liste_pdf']);
+    Route::get('/export-commande-pdf/{uuid}', [OrderController::class, 'export_orders_pdf']);
+    Route::get('/export-livraison-list-pdf', [DeliveryController::class, 'export_livraison_liste_pdf']);
+    Route::get('/export-livraison-pdf/{uuid}', [DeliveryController::class, 'export_delivery_pdf']);
 
 
 
@@ -132,4 +144,5 @@ Route::group(['middleware'=>'jwt.auth'],function(){
 });
 
 Route::post('/signin', [WebAuthController::class, 'signin']);
+Route::post('/mob-signin', [MobileAuthController::class, 'mobile_login']);
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Rules\MatchOldPassword;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -13,17 +14,25 @@ use Illuminate\Validation\ValidationException;
 class WebAuthController extends Controller
 {
 
+
     public function signin(Request $request){
 
         $validated = $request->validate([
-            'email' => 'required|email',
+            'phone' => 'required',
             'password' => 'required',
         ]);
 
-        if (! $token = JWTAuth::attempt(['email' => $request->email, 'password' => $request->password, 'active' => 1])) {
+        if (! $token = JWTAuth::attempt(['phone' => $request->phone, 'password' => $request->password, 'active' => 1])) {
 
             throw ValidationException::withMessages([
                 'email' => ['Les informations d\'identification fournies sont incorrectes']
+            ]);
+        }
+
+        $user = Auth::user();
+        if ($user->hasRole('livreur')) {
+            throw ValidationException::withMessages([
+                'role' => ['Vous n\'êtes pas autorisé à vous connecter']
             ]);
         }
 
@@ -35,7 +44,7 @@ class WebAuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'user' => auth()->user()
+            'user' => auth()->user(),
         ]);
     }
 
@@ -43,7 +52,7 @@ class WebAuthController extends Controller
     {
         $user = Auth::user();
 
-        return response()->json(['user'=> $user]);
+        return response()->json(['data'=> new UserResource($user)]);
     }
 
 
@@ -66,4 +75,6 @@ class WebAuthController extends Controller
     public function refresh() {
         return $this->createNewToken(auth()->refresh());
     }
+
+
 }

@@ -34,7 +34,7 @@ class ProcurementRepository extends Repository
 
         return Procurement::where('procurements.uuid', $uuid)
                             ->where('procurements.bakehouse_id', $bakehouse_id)
-                            ->with(['procurement_details.product','supplier'])->first();
+                            ->with(['procurement_details.product','procurement_details.unit','supplier'])->first();
     }
 
     public function procurementStore(Request $request)  {
@@ -66,6 +66,7 @@ class ProcurementRepository extends Repository
             $itemdata['unit_price'] = $item->unit_price;
             $itemdata['product_tax'] = $item->product_tax;
             $itemdata['product_discount'] = $item->product_discount;
+            $itemdata['unit_id'] = $item->unit_id;
 
             ProcurementDetails::create($itemdata);
 
@@ -155,7 +156,7 @@ class ProcurementRepository extends Repository
             $itemdata['unit_price'] = $item->unit_price;
             // $itemdata['product_tax'] = $item->product_tax;
             $itemdata['product_discount'] = $item->product_discount;
-            // $itemdata['sub_total'] = $item->sub_total;
+            $itemdata['unit_id'] = $item->unit_id;
 
             ProcurementDetails::create($itemdata);
             if ($status == 1) {
