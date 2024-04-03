@@ -23,7 +23,7 @@ class MobileAuthController extends Controller
             return response()->json(['error' => $validator->errors()], 401);
         }
 
-        if (! $token = JWTAuth::attempt(['phone' => $request->phone_number, 'password' => $request->password, 'active' => 1])) {
+        if (! $token = JWTAuth::attempt(['phone' => $request->phone, 'password' => $request->password, 'active' => 1])) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
