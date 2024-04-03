@@ -126,6 +126,7 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::get('/transactions-livreurs-recent', [TransactionController::class, 'transaction_by_livreurs_recent']);
     Route::get('/reliquat-versements-by-livreurs', [TransactionController::class, 'reliquat_by_livreurs']);
     Route::post('create-transaction-mobile', [TransactionController::class, 'create_transaction_mobile_api']);
+    Route::post('update-transaction-mobile', [TransactionController::class, 'update_transaction_mobile_api']);
 
 
 });

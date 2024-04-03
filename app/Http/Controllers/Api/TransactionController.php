@@ -128,4 +128,11 @@ class TransactionController extends Controller
         return response()->json(['data'=>$resp]);
     }
 
+    public function update_transaction_mobile_api(Request $request)
+    {
+        $resp = $this->transactionRepository->update_transaction_mobile($request);
+
+        return response()->json(['data'=>$resp]);
+    }
+
 }
