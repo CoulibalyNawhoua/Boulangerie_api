@@ -72,6 +72,7 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::get('permission-select', [PermissionConroller::class, 'permissionSelect']);
 
     Route::apiResource('technical-sheet', TechnicalSheetController::class);
+    Route::get('technical-sheet-instock', [TechnicalSheetController::class,'production_in_stock']);
 
     Route::apiResource('production-histories', ProductionHistoryController::class);
     Route::get('/production-histories-details/{uuid}', [ProductionHistoryController::class, 'details_history_products']);
@@ -101,6 +102,7 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::get('/sale/view/{uuid}', [SaleController::class, 'saleView']);
     Route::delete('/sale-delete/{id}', [SaleController::class, 'saleDestroy']);
     Route::get('/sale-sum-today', [SaleController::class, 'saleSum']);
+    Route::get('/sale-today-list', [SaleController::class, 'saleUserList']);
 
     Route::get('/transactions/versement-deliveries', [TransactionController::class, 'versement_delivery']);
     Route::get('/transactions/versement-customers', [TransactionController::class, 'versement_customers']);

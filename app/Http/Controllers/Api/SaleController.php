@@ -74,4 +74,11 @@ class SaleController extends Controller
 
         return response()->json(['data' => $resp]);
     }
+
+    public function saleUserList()
+    {
+        $resp = $this->saleRepository->saleUserTodayList();
+
+        return response()->json(['data' => $resp]);
+    }
 }

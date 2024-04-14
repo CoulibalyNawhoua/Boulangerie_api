@@ -158,7 +158,7 @@ class TransactionRepository extends Repository
     public function transaction_by_livreur() {
 
 
-        $query = Transaction::selectRaw('total_amount,created_at')
+        $query = Transaction::selectRaw('total_amount,type_payment,created_at')
                                 ->where('delivery_person_id', Auth::user()->id)
                                 ->where('status_paiement', 1)
                                 ->orderByDesc('created_at')
@@ -189,7 +189,7 @@ class TransactionRepository extends Repository
 
     public function transaction_by_livreur_recent() {
 
-        $query = Transaction::selectRaw('total_amount,created_at')
+        $query = Transaction::selectRaw('total_amount,type_payment,created_at')
                                 ->where('delivery_person_id', Auth::user()->id)
                                 ->where('status_paiement', 1)
                                 ->orderByDesc('created_at')

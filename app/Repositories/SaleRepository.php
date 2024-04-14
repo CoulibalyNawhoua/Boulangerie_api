@@ -28,6 +28,7 @@ class SaleRepository extends Repository
                 ->where('bakehouse_id', $bakehouse_id)
                 ->with('auteur')
                 ->withCount('sale_details')
+                ->orderByDesc('created_at')
                 ->get();
     }
 
@@ -86,15 +87,15 @@ class SaleRepository extends Repository
                 ]);
             }
 
-            ProductHistory::create([
-                'quantity' => $item->quantity,
-                'price' => $item->sub_total,
-                'type' => 0, // sale,
-                'bakehouse_id' => $bakehouse_id,
-                'product_id' => $item->product_id,
-                'added_by' => Auth::user()->id,
-                'add_ip' => $this->getIp(),
-            ]);
+            // ProductHistory::create([
+            //     'quantity' => $item->quantity,
+            //     'price' => $item->sub_total,
+            //     'type' => 0, // sale,
+            //     'bakehouse_id' => $bakehouse_id,
+            //     'product_id' => $item->product_id,
+            //     'added_by' => Auth::user()->id,
+            //     'add_ip' => $this->getIp(),
+            // ]);
 
 
         }
@@ -131,6 +132,19 @@ class SaleRepository extends Repository
                 ->where('added_by', Auth::user()->id)
                 ->whereDate('created_at', Carbon::now())
                 ->sum('total_amount');
+    }
+
+    public function saleUserTodayList()  {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        return Sale::where('bakehouse_id', $bakehouse_id)
+                ->where('added_by', Auth::user()->id)
+                ->whereDate('created_at', Carbon::now())
+                ->with('auteur')
+                ->withCount('sale_details')
+                ->orderByDesc('created_at')
+                ->get();
     }
 
 

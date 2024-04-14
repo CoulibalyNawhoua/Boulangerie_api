@@ -22,9 +22,11 @@ class SupplierRepository extends Repository
 
         $query = Supplier::where('suppliers.is_deleted',0)
                         ->where('suppliers.bakehouse_id', $bakehouse_id)
-                        ->leftJoin('users','users.id','=','suppliers.added_by');
+                        ->leftJoin('users','users.id','=','suppliers.added_by')
+                        ->leftJoin('familles','familles.id','=','suppliers.famille_id')
+                        ->orderByDesc('suppliers.created_at');
 
-        return $query->selectRaw('suppliers.*, CONCAT(users.first_name," ",users.last_name) as created_by')->get();
+        return $query->selectRaw('suppliers.*, CONCAT(users.first_name," ",users.last_name) as created_by,familles.name as category')->get();
     }
 
 }

@@ -21,6 +21,7 @@ class ProductRepository extends Repository
 
         return Product::where('is_deleted', 0)
                         ->with('unit')
+                        ->orderByDesc('created_at')
                         ->get();
    }
 
@@ -139,6 +140,7 @@ class ProductRepository extends Repository
                         ->where('products.is_deleted', 0)
                        ->where('products.type', 0)
                         ->where('products.bakehouse_id', $bakehouse_id)
+                        ->orderByDesc('products.created_at')
                         ->get();
 
         return $query;
@@ -153,6 +155,7 @@ class ProductRepository extends Repository
                 ->where('products.is_deleted', 0)
                 ->where('products.type', 1)
                 ->where('products.bakehouse_id', $bakehouse_id)
+                ->orderByDesc('products.created_at')
                 ->get();
     }
 

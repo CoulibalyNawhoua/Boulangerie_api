@@ -34,7 +34,7 @@ class TechnicalSheet extends Model
         'is_deleted',
         'delete_ip',
         'delete_date',
-        'uuid'
+        'uuid',
     ];
 
 

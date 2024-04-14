@@ -40,7 +40,7 @@ class ExpenseController extends Controller
         $validated = $request->validate([
             'libelle' => 'required',
             'total_amount' => 'required',
-            'comment' => 'required'
+            // 'comment' => 'required'
         ]);
 
         $resp = $this->expenseRepository->create($request->all());

@@ -62,6 +62,12 @@ class TechnicalSheetController extends Controller
         //
     }
 
+    public function production_in_stock(){
+        $resp = $this->technicalSheetRepository->technicalSheetInStockList();
+
+        return response()->json(['data' => $resp]);
+    }
+
     public function export_technicalsheet_pdf($uuid)
     {
 

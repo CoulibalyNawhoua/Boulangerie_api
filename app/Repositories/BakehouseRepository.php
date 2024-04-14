@@ -87,10 +87,18 @@ class BakehouseRepository extends Repository
                                     ->where('is_deleted',0)
                                     ->count();
 
-        $queryStockList = StockProduct::selectRaw('products.price,products.unit_id, products_stock.product_id, products_stock.id, products.name AS product_name, products.image, products_stock.quantity, units.name AS unit_name')
+        $queryStockListOne = StockProduct::selectRaw('products.price,products.unit_id, products_stock.product_id, products_stock.id, products.name AS product_name, products.image, products_stock.quantity, units.name AS unit_name')
                     ->where('products_stock.bakehouse_id', $bakehouse_id)
                     ->leftJoin('products', 'products.id', '=', 'products_stock.product_id')
                     ->leftJoin('units', 'units.id', '=', 'products.unit_id')
+                    ->where('products.type',0)
+                    ->get();
+
+        $queryStockListTwo = StockProduct::selectRaw('products.price,products.unit_id, products_stock.product_id, products_stock.id, products.name AS product_name, products.image, products_stock.quantity')
+                    ->where('products_stock.bakehouse_id', $bakehouse_id)
+                    ->leftJoin('products', 'products.id', '=', 'products_stock.product_id')
+                    // ->leftJoin('units', 'units.id', '=', 'products.unit_id')
+                    ->where('products.type',1)
                     ->get();
 
         $queryDeliveryList = User::where('users.bakehouse_id', $bakehouse_id)
@@ -120,6 +128,7 @@ class BakehouseRepository extends Repository
                                         ], 'total_amount')
                                         ->leftJoin('units', 'units.id', '=', 'products.unit_id')
                                         ->where('products.bakehouse_id',$bakehouse_id)
+                                        ->where('products.type',0)
                                         ->get();
 
         $deliveryBymonth = DeliveryDetails::selectRaw("SUM(delivery_details.quantity) as quantity, MONTH(delivery_details.created_at) as month")
@@ -163,7 +172,8 @@ class BakehouseRepository extends Repository
         $data["deliveryTotal"] = $deliveryTotal;
         $data["technicalTotal"] = $technicalTotal;
 
-        $data["queryStockList"] = $queryStockList;
+        $data["queryStockListOne"] = $queryStockListOne;
+        $data["queryStockListTwo"] = $queryStockListTwo;
         $data["queryDeliveryList"] = $queryDeliveryList;
         $data["queryDepenseList"] = $queryDepenseList;
         $data["deliverSerie"] = $deliverSerie;

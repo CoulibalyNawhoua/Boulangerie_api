@@ -38,5 +38,11 @@ class ProductHistory extends Model
         'delete_ip',
         'delete_date',
         'uuid',
+        'technical_sheet_id',
     ];
+
+    public function technical_sheet()
+    {
+        return $this->belongsTo(TechnicalSheet::class,'technical_sheet_id', 'id');
+    }
 }
