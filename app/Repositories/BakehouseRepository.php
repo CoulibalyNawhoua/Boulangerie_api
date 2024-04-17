@@ -57,6 +57,7 @@ class BakehouseRepository extends Repository
                                 ->sum('total_amount');
 
         $salesCaisseTotal = Sale::where('bakehouse_id',$bakehouse_id)
+                                    ->where('is_deleted',0)
                                     ->sum('total_amount');
 
         $orderReturnTotal = OrderReturn::where('bakehouse_id',$bakehouse_id)
@@ -145,6 +146,51 @@ class BakehouseRepository extends Repository
                                                     ->groupByRaw("MONTH(order_return_details.created_at)")
                                                     ->get();
 
+    // STAT DU JOUR
+
+    $saleDeliveryTotalToday = Delivery::where('bakehouse_id',$bakehouse_id)
+                                    ->where('status',1)
+                                    ->where('is_deleted',0)
+                                    ->whereDate('created_at', Carbon::now())
+                                    ->sum('total_amount');
+
+    $orderTotalToday = Order::where('bakehouse_id',$bakehouse_id)
+                            ->where('status',1)
+                            ->where('is_deleted',0)
+                            ->whereDate('created_at', Carbon::now())
+                            ->sum('total_amount');
+
+    $salesCaisseTotalToday = Sale::where('bakehouse_id',$bakehouse_id)
+                                ->where('is_deleted',0)
+                                ->whereDate('created_at', Carbon::now())
+                                ->sum('total_amount');
+
+    // $orderReturnTotalToday = OrderReturn::where('bakehouse_id',$bakehouse_id)
+    //                                 ->whereDate('created_at', Carbon::now())
+    //                                     ->sum('total_amount');
+
+    $trasactionTotalToday = Transaction::where('bakehouse_id',$bakehouse_id)
+                                        ->where('status_paiement', 1)
+                                        ->whereDate('created_at', Carbon::now())
+                                        ->sum('total_amount');
+
+    // $depenseProductToday = Procurement::where('bakehouse_id',$bakehouse_id)
+    //                                     ->where('status',1)
+    //                                     ->whereDate('created_at', Carbon::now())
+    //                                     ->sum('total_amount');
+
+    // $otherDepenseToday = Expense::where('bakehouse_id',$bakehouse_id)
+    //                                     ->where('is_deleted',0)
+    //                                     ->whereDate('created_at', Carbon::now())
+    //                                     ->sum('total_amount');
+
+    $deliveryByDay = DeliveryDetails::selectRaw("SUM(delivery_details.quantity) as quantity,products.name,products.image")
+                                            ->leftJoin('deliveries','deliveries.id','=', 'delivery_details.delivery_id')
+                                            ->leftJoin('products','products.id','=', 'delivery_details.product_id')
+                                                ->where('deliveries.bakehouse_id',$bakehouse_id)
+                                                ->whereDate('delivery_details.created_at', Carbon::now())
+                                                    ->groupByRaw("delivery_details.product_id,products.name,products.image")
+                                                        ->get();
 
 
         $deliverSerie = array_fill_keys($labels, 0);
@@ -179,6 +225,15 @@ class BakehouseRepository extends Repository
         $data["deliverSerie"] = $deliverSerie;
         $data["returnDeliverySerie"] = $returnDeliverySerie;
         $data["labels"] = $labels;
+
+
+        $data["deliveryByDay"] = $deliveryByDay;
+        $data["statsToday"] = array(
+                                    ["designation"=>"Vente au contoir","chiffre"=>$salesCaisseTotalToday],
+                                    ["designation"=>"Commandes","chiffre"=>$orderTotalToday],
+                                    ["designation"=>"Livraisons","chiffre"=>$saleDeliveryTotalToday],
+                                    ["designation"=>"Encaissements","chiffre"=>$trasactionTotalToday],
+                                    );
 
         return $data;
 

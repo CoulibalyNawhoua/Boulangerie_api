@@ -122,4 +122,18 @@ class OrderController extends Controller
         return $pdf->download('commandes_detail.pdf',$headers);
     }
 
+    public function order_store_Epayement(Request $request){
+
+        $resp = $this->orderRepository->order_store_e_payement($request);
+
+        return response()->json(['data' => $resp]);
+    }
+
+    public function order_update_Epayement(Request $request){
+
+        $resp = $this->orderRepository->order_update_e_payement($request);
+
+        return response()->json(['data' => $resp]);
+    }
+
 }

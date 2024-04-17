@@ -87,6 +87,8 @@ Route::group(['middleware'=>'jwt.auth'],function(){
 
     Route::apiResource('orders', OrderController::class);
     Route::get('/orders-validate/{id}', [OrderController::class, 'orderValidate']);
+    Route::post('/orders-store-epayment', [OrderController::class, 'order_store_Epayement']);
+    Route::post('/orders-update-epayment', [OrderController::class, 'order_update_Epayement']);
 
     Route::get('/sale-stock', [ProductStockController::class, 'saleStock']);
     Route::get('/production-stock', [ProductStockController::class, 'productionStock']);
@@ -104,6 +106,9 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::get('/sale-sum-today', [SaleController::class, 'saleSum']);
     Route::get('/sale-today-list', [SaleController::class, 'saleUserList']);
 
+    Route::post('/sale-store-epayment', [SaleController::class, 'sale_store_epayment']);
+    Route::post('/sale-update-epayment', [SaleController::class, 'sale_update_epayment']);
+
     Route::get('/transactions/versement-deliveries', [TransactionController::class, 'versement_delivery']);
     Route::get('/transactions/versement-customers', [TransactionController::class, 'versement_customers']);
     Route::get('/transactions/versement-view-delivries/{id}', [TransactionController::class, 'versement_delivery_view']);
@@ -112,6 +117,9 @@ Route::group(['middleware'=>'jwt.auth'],function(){
     Route::get('/transactions/deliveries/{id}', [TransactionController::class, 'DeliveryView']);
     Route::get('/transactions/customers/{id}', [TransactionController::class, 'CustomersView']);
     Route::post('transaction-store', [TransactionController::class, 'storeTransacts']);
+
+    Route::get('/transactions/todays', [TransactionController::class, 'funct_transaction_liste_today']);
+    Route::get('/transactions/historiques', [TransactionController::class, 'func_transaction_liste_historiques']);
 
 
     Route::get('/bakehouses/dashbord', [BakehouseController::class, 'dashboardIndex']);
