@@ -36,6 +36,7 @@ class MobileAuthController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'user' => Auth::user(),
+            'backhouse' => Auth::user()->bakehouse()->select("id","name","address","phone")->first()
 
         ]);
     }
