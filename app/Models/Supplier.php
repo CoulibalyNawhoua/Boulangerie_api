@@ -38,7 +38,8 @@ class Supplier extends Model
         'is_deleted',
         'deleted_by',
         'delete_ip',
-        'uuid'
+        'uuid',
+        'famille_id'
     ];
 
     public function auteur()
@@ -46,4 +47,8 @@ class Supplier extends Model
         return $this->belongsTo(User::class,'added_by','id');
     }
 
+    public function famille()
+    {
+        return $this->belongsTo(Famille::class,'famille_id','id');
+    }
 }

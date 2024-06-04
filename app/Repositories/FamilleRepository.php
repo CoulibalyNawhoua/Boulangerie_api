@@ -21,7 +21,7 @@ class FamilleRepository extends Repository
         $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
 
         return Famille::where('is_deleted',0)
-                    ->where('familles.bakehouse_id', $bakehouse_id)
+                    // ->where('familles.bakehouse_id', $bakehouse_id)
                     ->leftJoin('users','users.id','=','familles.added_by')
                     ->selectRaw('familles.*, CONCAT(users.first_name," ",users.first_name) as created_by')->get();
     }

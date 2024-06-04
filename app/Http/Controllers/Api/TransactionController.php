@@ -135,4 +135,18 @@ class TransactionController extends Controller
         return response()->json(['data'=>$resp]);
     }
 
+    public function funct_transaction_liste_today()
+    {
+        $resp = $this->transactionRepository->transaction_liste_today();
+
+        return response()->json(['data'=>$resp]);
+    }
+
+    public function func_transaction_liste_historiques()
+    {
+        $resp = $this->transactionRepository->transaction_liste_historiques();
+
+        return response()->json(['data'=>$resp]);
+    }
+
 }

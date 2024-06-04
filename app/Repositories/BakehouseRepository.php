@@ -57,6 +57,7 @@ class BakehouseRepository extends Repository
                                 ->sum('total_amount');
 
         $salesCaisseTotal = Sale::where('bakehouse_id',$bakehouse_id)
+                                    ->where('is_deleted',0)
                                     ->sum('total_amount');
 
         $orderReturnTotal = OrderReturn::where('bakehouse_id',$bakehouse_id)
@@ -87,10 +88,18 @@ class BakehouseRepository extends Repository
                                     ->where('is_deleted',0)
                                     ->count();
 
-        $queryStockList = StockProduct::selectRaw('products.price,products.unit_id, products_stock.product_id, products_stock.id, products.name AS product_name, products.image, products_stock.quantity, units.name AS unit_name')
+        $queryStockListOne = StockProduct::selectRaw('products.price,products.unit_id, products_stock.product_id, products_stock.id, products.name AS product_name, products.image, products_stock.quantity, units.name AS unit_name')
                     ->where('products_stock.bakehouse_id', $bakehouse_id)
                     ->leftJoin('products', 'products.id', '=', 'products_stock.product_id')
                     ->leftJoin('units', 'units.id', '=', 'products.unit_id')
+                    ->where('products.type',0)
+                    ->get();
+
+        $queryStockListTwo = StockProduct::selectRaw('products.price,products.unit_id, products_stock.product_id, products_stock.id, products.name AS product_name, products.image, products_stock.quantity')
+                    ->where('products_stock.bakehouse_id', $bakehouse_id)
+                    ->leftJoin('products', 'products.id', '=', 'products_stock.product_id')
+                    // ->leftJoin('units', 'units.id', '=', 'products.unit_id')
+                    ->where('products.type',1)
                     ->get();
 
         $queryDeliveryList = User::where('users.bakehouse_id', $bakehouse_id)
@@ -120,6 +129,7 @@ class BakehouseRepository extends Repository
                                         ], 'total_amount')
                                         ->leftJoin('units', 'units.id', '=', 'products.unit_id')
                                         ->where('products.bakehouse_id',$bakehouse_id)
+                                        ->where('products.type',0)
                                         ->get();
 
         $deliveryBymonth = DeliveryDetails::selectRaw("SUM(delivery_details.quantity) as quantity, MONTH(delivery_details.created_at) as month")
@@ -136,6 +146,51 @@ class BakehouseRepository extends Repository
                                                     ->groupByRaw("MONTH(order_return_details.created_at)")
                                                     ->get();
 
+    // STAT DU JOUR
+
+    $saleDeliveryTotalToday = Delivery::where('bakehouse_id',$bakehouse_id)
+                                    ->where('status',1)
+                                    ->where('is_deleted',0)
+                                    ->whereDate('created_at', Carbon::now())
+                                    ->sum('total_amount');
+
+    $orderTotalToday = Order::where('bakehouse_id',$bakehouse_id)
+                            ->where('status',1)
+                            ->where('is_deleted',0)
+                            ->whereDate('created_at', Carbon::now())
+                            ->sum('total_amount');
+
+    $salesCaisseTotalToday = Sale::where('bakehouse_id',$bakehouse_id)
+                                ->where('is_deleted',0)
+                                ->whereDate('created_at', Carbon::now())
+                                ->sum('total_amount');
+
+    // $orderReturnTotalToday = OrderReturn::where('bakehouse_id',$bakehouse_id)
+    //                                 ->whereDate('created_at', Carbon::now())
+    //                                     ->sum('total_amount');
+
+    $trasactionTotalToday = Transaction::where('bakehouse_id',$bakehouse_id)
+                                        ->where('status_paiement', 1)
+                                        ->whereDate('created_at', Carbon::now())
+                                        ->sum('total_amount');
+
+    // $depenseProductToday = Procurement::where('bakehouse_id',$bakehouse_id)
+    //                                     ->where('status',1)
+    //                                     ->whereDate('created_at', Carbon::now())
+    //                                     ->sum('total_amount');
+
+    // $otherDepenseToday = Expense::where('bakehouse_id',$bakehouse_id)
+    //                                     ->where('is_deleted',0)
+    //                                     ->whereDate('created_at', Carbon::now())
+    //                                     ->sum('total_amount');
+
+    $deliveryByDay = DeliveryDetails::selectRaw("SUM(delivery_details.quantity) as quantity,products.name,products.image")
+                                            ->leftJoin('deliveries','deliveries.id','=', 'delivery_details.delivery_id')
+                                            ->leftJoin('products','products.id','=', 'delivery_details.product_id')
+                                                ->where('deliveries.bakehouse_id',$bakehouse_id)
+                                                ->whereDate('delivery_details.created_at', Carbon::now())
+                                                    ->groupByRaw("delivery_details.product_id,products.name,products.image")
+                                                        ->get();
 
 
         $deliverSerie = array_fill_keys($labels, 0);
@@ -163,12 +218,22 @@ class BakehouseRepository extends Repository
         $data["deliveryTotal"] = $deliveryTotal;
         $data["technicalTotal"] = $technicalTotal;
 
-        $data["queryStockList"] = $queryStockList;
+        $data["queryStockListOne"] = $queryStockListOne;
+        $data["queryStockListTwo"] = $queryStockListTwo;
         $data["queryDeliveryList"] = $queryDeliveryList;
         $data["queryDepenseList"] = $queryDepenseList;
         $data["deliverSerie"] = $deliverSerie;
         $data["returnDeliverySerie"] = $returnDeliverySerie;
         $data["labels"] = $labels;
+
+
+        $data["deliveryByDay"] = $deliveryByDay;
+        $data["statsToday"] = array(
+                                    ["designation"=>"Vente au contoir","chiffre"=>$salesCaisseTotalToday],
+                                    ["designation"=>"Commandes","chiffre"=>$orderTotalToday],
+                                    ["designation"=>"Livraisons","chiffre"=>$saleDeliveryTotalToday],
+                                    ["designation"=>"Encaissements","chiffre"=>$trasactionTotalToday],
+                                    );
 
         return $data;
 

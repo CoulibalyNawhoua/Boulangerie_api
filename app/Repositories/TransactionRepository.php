@@ -158,11 +158,45 @@ class TransactionRepository extends Repository
     public function transaction_by_livreur() {
 
 
-        $query = Transaction::selectRaw('total_amount,created_at')
+        $query = Transaction::selectRaw('total_amount,type_payment,created_at')
                                 ->where('delivery_person_id', Auth::user()->id)
                                 ->where('status_paiement', 1)
                                 ->orderByDesc('created_at')
                                 ->get();
+
+        return $query;
+    }
+
+    public function transaction_liste_today() {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        $query = Transaction::where('status_paiement', 1)
+                                ->where('added_by', Auth::user()->id)
+                                ->where('bakehouse_id', $bakehouse_id)
+                                ->whereDate('created_at', Carbon::now())
+                                ->where(function ($query) {
+                                    $query->whereNotNull('customer_id');
+                                    $query->orWhereNotNull('delivery_person_id');
+
+                                })
+                                ->orderByDesc('created_at')
+                                ->with(['reception','customer','livreur'])
+                                ->get();
+
+        return $query;
+    }
+
+    public function transaction_liste_historiques() {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        $query = Transaction::where('status_paiement', 1)
+                                ->where('bakehouse_id', $bakehouse_id)
+                                ->whereNotNull('customer_id')
+                                ->orWhereNotNull('delivery_person_id')
+                                ->orderByDesc('created_at')
+                                ->with(['reception','customer','livreur'])->get();
 
         return $query;
     }
@@ -189,7 +223,7 @@ class TransactionRepository extends Repository
 
     public function transaction_by_livreur_recent() {
 
-        $query = Transaction::selectRaw('total_amount,created_at')
+        $query = Transaction::selectRaw('total_amount,type_payment,created_at')
                                 ->where('delivery_person_id', Auth::user()->id)
                                 ->where('status_paiement', 1)
                                 ->orderByDesc('created_at')

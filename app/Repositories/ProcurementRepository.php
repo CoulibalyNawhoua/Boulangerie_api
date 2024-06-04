@@ -24,6 +24,8 @@ class ProcurementRepository extends Repository
 
        return  Procurement::where('is_deleted', 0)
            ->where('procurements.bakehouse_id', $bakehouse_id)
+           ->with('supplier')
+           ->orderByDesc('created_at')
            ->get();
     }
 
@@ -34,7 +36,7 @@ class ProcurementRepository extends Repository
 
         return Procurement::where('procurements.uuid', $uuid)
                             ->where('procurements.bakehouse_id', $bakehouse_id)
-                            ->with(['procurement_details.product','procurement_details.unit','supplier'])->first();
+                            ->with(['procurement_details.product','procurement_details.unit','supplier.famille'])->first();
     }
 
     public function procurementStore(Request $request)  {

@@ -74,4 +74,26 @@ class SaleController extends Controller
 
         return response()->json(['data' => $resp]);
     }
+
+    public function saleUserList()
+    {
+        $resp = $this->saleRepository->saleUserTodayList();
+
+        return response()->json(['data' => $resp]);
+    }
+
+
+    public function sale_store_epayment(Request $request)
+    {
+        $resp = $this->saleRepository->saleStoreEpayment($request);
+
+        return response()->json(['data' => $resp]);
+    }
+
+    public function sale_update_epayment(Request $request)
+    {
+        $resp = $this->saleRepository->Sale_update_e_payement($request);
+
+        return response()->json(['data' => $resp]);
+    }
 }

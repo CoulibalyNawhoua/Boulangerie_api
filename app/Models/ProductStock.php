@@ -23,7 +23,7 @@ class ProductStock extends Model
         'stock_alert',
         'product_id',
         'bakehouse_id',
-        'unit_id'
+        'unit_id',
     ];
 
     public function product()

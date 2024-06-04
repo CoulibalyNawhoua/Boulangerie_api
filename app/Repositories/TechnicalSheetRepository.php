@@ -24,6 +24,18 @@ class TechnicalSheetRepository extends Repository
 
         return TechnicalSheet::where('is_deleted', 0)
             ->where('bakehouse_id', $bakehouse_id)
+            ->orderByDesc('created_at')
+            ->get();
+    }
+
+    public function technicalSheetInStockList()  {
+
+        $bakehouse_id = (Auth::user()->bakehouse) ? Auth::user()->bakehouse->id : NULL ;
+
+        return TechnicalSheet::where('is_deleted', 0)
+            ->where('bakehouse_id', $bakehouse_id)
+            ->whereDate('date', Carbon::today())
+            ->orderByDesc('created_at')
             ->get();
     }
 
